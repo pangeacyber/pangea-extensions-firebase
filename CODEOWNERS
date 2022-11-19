@@ -1,0 +1,4 @@
+# The CODEOWNERS file matches the last rule going from top to bottom
+# so override rules happen later.
+
+*   @govind-salinas-pangea @DonkeyKongII
