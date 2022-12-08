@@ -16,7 +16,7 @@
 
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
-import {PangeaConfig, RedactService} from "node-pangea"
+import {PangeaConfig, RedactService} from "pangea-node-sdk"
 
 import config from "./config";
 import * as logs from "./logs";
