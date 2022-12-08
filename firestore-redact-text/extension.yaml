@@ -156,9 +156,9 @@ params:
     immutable: true
 
   - param: PANGEA_REDACT_TOKEN
-    label: A Pangea Auth Token with access to the Redact service
+    label: Pangea Auth Token with access to the Redact service
     description: >
-      the Pangea Token to use to authenticate access to the Pangea Redact service. The **Token** value can be copied from the [Redact Dashboard](https://console.pangea.cloud/service/redact) of the Pangea Console.
+      The Pangea Token to use to authenticate access to the Pangea Redact service. The **Token** value can be copied from the [Redact Dashboard](https://console.pangea.cloud/service/redact) of the Pangea Console.
     example: pts_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     #validationRegex: "^[^/]+(/[^/]+/[^/]+)*$"
     #validationErrorMessage: Must be a valid Pangea Auth Token

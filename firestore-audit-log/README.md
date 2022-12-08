@@ -36,7 +36,7 @@ admin.firestore().collection('redact').add({
 
 #### Additional setup
 
-Before installing this extension, make sure that you have signed up for a free [Pangea](https://pangea.cloud/signup) account and have [set up a Cloud Firestore database](https://firebase.google.com/docs/firestore/quickstart) in your Firebase project.
+Before installing this extension, make sure that you have signed up for a free [Pangea](https://pangea.cloud/signup?utm_medium=google-marketplace&utm_source=marketplace&utm_campaign=firebase-extension-audit) account and have [set up a Cloud Firestore database](https://firebase.google.com/docs/firestore/quickstart) in your Firebase project.
 
 #### Billing
 To install an extension, your project must be on the [Blaze (pay as you go) plan](https://firebase.google.com/pricing)
@@ -68,17 +68,14 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
 * Pangea service domain: Where is your Pangea Service is deployed?
 
 
-* Pangea Auth Token: A Pangea Auth Token with access to the Redact service.
-
-
-* Pangea Config Id: A Pangea Config ID for the Redact service.
+* Pangea Auth Token: A Pangea Auth Token with access to the Secure Audit Log service.
 
 
 
 
 **Cloud Functions:**
 
-* **fstranslate:** Listens for writes of new strings to your specified Cloud Firestore collection, redact sensitive text from the strings based on defined rulesets, then writes the translated strings back to the same document.
+* **fslog:** Listens for writes of new strings to your specified Cloud Firestore collection, redact sensitive text from the strings based on defined rulesets, then writes the translated strings back to the same document.
 
 
 

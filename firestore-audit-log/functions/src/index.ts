@@ -16,7 +16,7 @@
 
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
-import {PangeaConfig, AuditService} from "node-pangea"
+import {PangeaConfig, AuditService} from "pangea-node-sdk"
 
 import config from "./config";
 import * as logs from "./logs";
@@ -28,11 +28,8 @@ enum ChangeType {
   UPDATE,
 }
 
-// Instantiate a Pangea Configuration object with the end point domain and configId
-const auditConfig = new PangeaConfig({
-  configId: config.auditConfigId,
-  domain: config.pangeaDomain,
-});
+// Instantiate a Pangea Configuration object with the end point domain
+const auditConfig = new PangeaConfig({ domain: config.pangeaDomain });
 
 // Instantiate the Audit Service using the auth token and config
 const audit = new AuditService(config.auditToken, auditConfig);
@@ -209,10 +206,9 @@ const logString = async (
     };
 
     const response = await audit.log(data);
+    logs.auditStringComplete(response.result);
 
-    logs.auditStringComplete(response.data);
-
-    return response.data;
+    return response.result;
   } catch (err) {
     logs.auditStringError(string, err);
     throw err;

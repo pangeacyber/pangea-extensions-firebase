@@ -19,6 +19,5 @@ export default {
   inputFieldName: process.env.INPUT_FIELD_NAME,
   outputFieldName: process.env.OUTPUT_FIELD_NAME,
   pangeaDomain: process.env.PANGEA_DOMAIN,
-  auditToken: process.env.PANGEA_AUDIT_TOKEN,
-  auditConfigId: process.env.PANGEA_AUDIT_CONFIGID
+  auditToken: process.env.PANGEA_AUDIT_TOKEN
 };
