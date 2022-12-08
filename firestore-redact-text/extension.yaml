@@ -22,8 +22,8 @@ description:
 
 license: Apache-2.0
 
-sourceUrl: https://github.com/firebase/extensions/tree/master/firestore-translate-text
-releaseNotesUrl: https://github.com/firebase/extensions/blob/master/firestore-translate-text/CHANGELOG.md
+sourceUrl: https://github.com/pangeacyber/pangea-extensions-firebase/blob/main/LICENSE/firestore-redact-text/
+releaseNotesUrl: https://github.com/pangeacyber/pangea-extensions-firebase/blob/main/LICENSE/firestore-redact-text/CHANGELOG.md
 
 author:
   authorName: Pangea Cyber
@@ -144,25 +144,22 @@ params:
   - param: PANGEA_DOMAIN
     label: Pangea service base domain
     description: >
-      The base domain of where your Pangea Service is deployed
-    example: aws.us.pangea.cloud
-    default: aws.us.pangea.cloud
+      The base domain of where your Pangea Service is deployed. The **Domain** value can be copied from the main dashboard of the [Pangea Console](https://console.pangea.cloud).
+    type: select
+    options:
+      - label: gcp.us.pangea.cloud
+        value: gcp.us.pangea.cloud
+      - label: aws.us.pangea.cloud
+        value: aws.us.pangea.cloud
+    default: gcp.us.pangea.cloud
     required: true
+    immutable: true
 
   - param: PANGEA_REDACT_TOKEN
     label: A Pangea Auth Token with access to the Redact service
     description: >
-      Used to authenticate access to Pangea services.
+      the Pangea Token to use to authenticate access to the Pangea Redact service. The **Token** value can be copied from the [Redact Dashboard](https://console.pangea.cloud/service/redact) of the Pangea Console.
     example: pts_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     #validationRegex: "^[^/]+(/[^/]+/[^/]+)*$"
     #validationErrorMessage: Must be a valid Pangea Auth Token
-    required: true
-
-  - param: PANGEA_REDACT_CONFIGID
-    label: A Pangea Config ID for the Redact service
-    description: >
-      TBD
-    example: pci_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-    #validationRegex: "^[^/]+(/[^/]+/[^/]+)*$"
-    #validationErrorMessage: Must be a valid Pange Config ID
     required: true

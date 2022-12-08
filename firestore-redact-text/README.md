@@ -6,7 +6,7 @@
 
 
 
-**Details**: Use this extension to redact sensitive text from strings (based on defined rules) written to a Cloud Firestore collection.
+**Details**: Use this extension to redact sensitive text from strings (based on defined rulesets) written to a Cloud Firestore collection.
 
 This extension listens to your specified Cloud Firestore collection. If you add a string to a specified field in any document within that collection, this extension:
 
@@ -36,7 +36,7 @@ admin.firestore().collection('redact').add({
 
 #### Additional setup
 
-Before installing this extension, make sure that you have signed up for a free [Pangea](https://pangea.cloud/signup) account and have [set up a Cloud Firestore database](https://firebase.google.com/docs/firestore/quickstart) in your Firebase project.
+Before installing this extension, make sure that you have signed up for a free [Pangea]( https://pangea.cloud/signup?utm_medium=google-marketplace&utm_source=marketplace&utm_campaign=firebase-extension-redact) account and have [set up a Cloud Firestore database](https://firebase.google.com/docs/firestore/quickstart) in your Firebase project.
 
 #### Billing
 To install an extension, your project must be on the [Blaze (pay as you go) plan](https://firebase.google.com/pricing)
@@ -71,14 +71,11 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
 * Pangea Auth Token: A Pangea Auth Token with access to the Redact service.
 
 
-* Pangea Config Id: A Pangea Config ID for the Redact service.
-
-
 
 
 **Cloud Functions:**
 
-* **fstranslate:** Listens for writes of new strings to your specified Cloud Firestore collection, redact sensitive text from the strings based on defined rulesets, then writes the translated strings back to the same document.
+* **fsredact:** Listens for writes of new strings to your specified Cloud Firestore collection, redacts sensitive text from the strings based on defined rulesets, then writes the translated strings back to the same document.
 
 
 

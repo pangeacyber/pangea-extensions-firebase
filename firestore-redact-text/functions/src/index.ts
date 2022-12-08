@@ -28,11 +28,8 @@ enum ChangeType {
   UPDATE,
 }
 
-// Instantiate a Pangea Configuration object with the end point domain and configId
-const redactConfig = new PangeaConfig({
-  configId: config.redactConfigId,
-  domain: config.pangeaDomain,
-});
+// Instantiate a Pangea Configuration object with the end point domain
+const redactConfig = new PangeaConfig({ domain: config.pangeaDomain });
 
 // Instantiate the Redact Service using the auth token and config
 const redact = new RedactService(config.redactToken, redactConfig);
