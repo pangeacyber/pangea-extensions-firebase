@@ -18,7 +18,7 @@ specVersion: v1beta
 
 displayName: Redact Text
 description:
-  Redact sensitive or Personally Identifiable Information (PII) information such as names, phone, credit card or socail security numbers from strings written to a Cloud Firestore collection based on defined rules (uses the Pangea Redact API).
+  Redact sensitive or Personally Identifiable Information (PII) information such as names, phone, credit card or social security numbers from strings written to a Cloud Firestore collection based on defined rulesets (uses the Pangea Redact API).
 
 license: Apache-2.0
 
@@ -136,7 +136,7 @@ params:
   - param: OUTPUT_FIELD_NAME
     label: Redaction output field name
     description: >
-      What is the name of the field where you want to store your redacted text?
+      What is the name of the field where you want to store the redacted version the string?
     example: redacted
     default: redacted
     required: true
@@ -149,8 +149,12 @@ params:
     options:
       - label: gcp.us.pangea.cloud
         value: gcp.us.pangea.cloud
+      - label: gcp.eu.pangea.cloud
+        value: gcp.eu.pangea.cloud
       - label: aws.us.pangea.cloud
         value: aws.us.pangea.cloud
+      - label: aws.eu.pangea.cloud
+        value: aws.eu.pangea.cloud
     default: gcp.us.pangea.cloud
     required: true
     immutable: true
@@ -160,6 +164,6 @@ params:
     description: >
       The Pangea Token to use to authenticate access to the Pangea Redact service. The **Token** value can be copied from the [Redact Dashboard](https://console.pangea.cloud/service/redact) of the Pangea Console.
     example: pts_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-    #validationRegex: "^[^/]+(/[^/]+/[^/]+)*$"
-    #validationErrorMessage: Must be a valid Pangea Auth Token
+    validationRegex: "^pts_[a-z2-7]{32}$"
+    validationErrorMessage: Must be a valid Pangea Auth Token
     required: true
