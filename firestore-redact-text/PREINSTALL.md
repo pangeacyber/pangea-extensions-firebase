@@ -1,4 +1,4 @@
-Use this extension to redact sensitive text from strings (based on defined rules) written to a Cloud Firestore collection.
+Use this extension to redact sensitive text from strings (based on defined rulesets) written to a Cloud Firestore collection.
 
 This extension listens to your specified Cloud Firestore collection. If you add a string to a specified field in any document within that collection, this extension:
 

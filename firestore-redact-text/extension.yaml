@@ -18,7 +18,7 @@ specVersion: v1beta
 
 displayName: Redact Text
 description:
-  Redact sensitive or Personally Identifiable Information (PII) information such as names, phone, credit card or socail security numbers from strings written to a Cloud Firestore collection based on defined rules (uses the Pangea Redact API).
+  Redact sensitive or Personally Identifiable Information (PII) information such as names, phone, credit card or socail security numbers from strings written to a Cloud Firestore collection based on defined rulesets (uses the Pangea Redact API).
 
 license: Apache-2.0
 
@@ -42,13 +42,13 @@ apis:
 
 roles:
   - role: datastore.user
-    reason: Allows the extension to write translated strings to Cloud Firestore.
+    reason: Allows the extension to write redacted strings to Cloud Firestore.
 
 resources:
   - name: fsredact
     type: firebaseextensions.v1beta.function
     description:
-      Listens for writes of new strings to your specified Cloud Firestore collection, redacts sensitive information based on defined rules,
+      Listens for writes of new strings to your specified Cloud Firestore collection, redacts sensitive information based on defined rulesets,
       then writes the redacted strings back to the same document.
     properties:
       location: ${param:LOCATION}
