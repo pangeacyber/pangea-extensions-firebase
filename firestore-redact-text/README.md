@@ -1,8 +1,8 @@
-# Translate Text
+# Redact Text
 
 **Author**: Pangea Cyber (**[https://pangea.cloud](https://pangea.cloud)**)
 
-**Description**: Redact sensitive text from strings written to a Cloud Firestore collection (uses the Pangea Redact API).
+**Description**: Redact sensitive or Personally Identifiable Information (PII) information such as names, phone, credit card or socail security numbers from strings written to a Cloud Firestore collection based on defined rulesets (uses the Pangea Redact API).
 
 
 
@@ -36,7 +36,7 @@ admin.firestore().collection('redact').add({
 
 #### Additional setup
 
-Before installing this extension, make sure that you have signed up for a free [Pangea]( https://pangea.cloud/signup?utm_medium=google-marketplace&utm_source=marketplace&utm_campaign=firebase-extension-redact) account and have [set up a Cloud Firestore database](https://firebase.google.com/docs/firestore/quickstart) in your Firebase project.
+Before installing this extension, make sure that you have signed up for a free [Pangea](https://pangea.cloud/signup) account and have [set up a Cloud Firestore database](https://firebase.google.com/docs/firestore/quickstart) in your Firebase project.
 
 #### Billing
 To install an extension, your project must be on the [Blaze (pay as you go) plan](https://firebase.google.com/pricing)
@@ -50,11 +50,9 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
 
 
 
-
 **Configuration Parameters:**
 
 * Cloud Functions location: Where do you want to deploy the functions created for this extension? You usually want a location close to your database. For help selecting a location, refer to the [location selection guide](https://firebase.google.com/docs/functions/locations).
-
 
 * Collection path: What is the path to the collection that contains the strings that you want to redact?
 
@@ -65,23 +63,17 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
 * Redaction output field name: What is the name of the field where you want to store your redacted text?
 
 
-* Pangea service domain: Where is your Pangea Service is deployed?
+* Pangea service base domain: The base domain of where your Pangea Service is deployed. The **Domain** value can be copied from the main dashboard of the [Pangea Console](https://console.pangea.cloud).
 
 
-* Pangea Auth Token: A Pangea Auth Token with access to the Redact service.
+* Pangea Auth Token with access to the Redact service: The Pangea Token to use to authenticate access to the Pangea Redact service. The **Token** value can be copied from the [Redact Dashboard](https://console.pangea.cloud/service/redact) of the Pangea Console.
 
 
 
 
 **Cloud Functions:**
 
-* **fsredact:** Listens for writes of new strings to your specified Cloud Firestore collection, redacts sensitive text from the strings based on defined rulesets, then writes the translated strings back to the same document.
-
-
-
-**APIs Used**:
-
-* redact.aws.us.pangea.cloud/v1/redact (Reason: To use the Pangea Redact Service to redact text from strings.)
+* **fsredact:** Listens for writes of new strings to your specified Cloud Firestore collection, redacts sensitive information based on defined rulesets, then writes the redacted strings back to the same document.
 
 
 

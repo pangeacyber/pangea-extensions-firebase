@@ -38,7 +38,7 @@ billingRequired: true
 
 apis:
 #  - apiName: audit.aws.us.pangea.cloud/v1/log
-#    reason: To use Pangea Redact Service to remove sensitive information from strings.
+#    reason: To use Pangea Secure Audit Log Service to log security critial events.
 
 roles:
   - role: datastore.user
