@@ -95,10 +95,6 @@ export const isolateFile = async ({
     // add the malious file to the zip file to isolated it
     zip.addLocalFile(originalFile);
 
-    // TODO: Add metadata, event info, or context to a txt file (timestamp, response data, user, etc)
-    //var content = "inner content of the file";
-    //zip.addFile("test.txt", Buffer.from(content, "utf8"), "entry comment goes here");
-
     // Write zip file to disk
     zip.writeZip(modifiedFile);
 

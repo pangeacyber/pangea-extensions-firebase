@@ -136,12 +136,9 @@ const logSingle = async (
   snapshot: admin.firestore.DocumentSnapshot
 ): Promise<void> => {
   logs.auditSingleString(input);
-
   try {
-
     const response = await logString(input);
     return updateResponse(snapshot, response);
-
   } catch (err) {
     logs.auditSingleStringError(input, err);
     throw err;

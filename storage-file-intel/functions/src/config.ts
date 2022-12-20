@@ -40,7 +40,6 @@ export default {
   ioslationPath: process.env.ISOLATION_PATH,
   includePathList: paramToArray(process.env.INCLUDE_PATH_LIST),
   excludePathList: paramToArray(process.env.EXCLUDE_PATH_LIST),
-  //deleteOriginalFile: deleteOriginalFile(process.env.DELETE_ORIGINAL_FILE),
   deleteOriginalFile: deleteImage.onSuccess,
   pangeaDomain: process.env.PANGEA_DOMAIN,
   pangeaToken: process.env.PANGEA_FILE_INTEL_TOKEN

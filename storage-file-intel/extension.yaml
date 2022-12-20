@@ -139,7 +139,7 @@ params:
     description: >
       Used to authenticate access to Pangea services.
     example: pts_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-#    default: 
+#    default:
     validationRegex: "^pts_[a-z2-7]{32}$"
     validationErrorMessage: Must be a valid Pangea Auth Token
     required: true

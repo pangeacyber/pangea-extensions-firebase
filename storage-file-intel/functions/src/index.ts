@@ -125,15 +125,7 @@ export const checkFileReputation = functions.storage
         );
         console.log(response.result);
 
-        // const IsolateFileResult result = await isolateFile({
-        //   bucket,
-        //   originalFile,
-        //   parsedPath,
-        //   objectMetadata: objectMetadata,
-        // })
-
         if(response.success) {
-
           logs.threatVerdict(response.result.data.verdict);
 
           if(response.result.data.verdict !== threatVerdict.unknown)
