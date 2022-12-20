@@ -22,8 +22,8 @@ description:
 
 license: Apache-2.0
 
-sourceUrl: https://github.com/pangeacyber/pangea-extensions-firebase/blob/main/LICENSE/firestore-audit-log/
-releaseNotesUrl: https://github.com/pangeacyber/pangea-extensions-firebase/blob/main/LICENSE/firestore-audit-log/CHANGELOG.md
+sourceUrl: https://github.com/pangeacyber/pangea-extensions-firebase/tree/main/firestore-audit-log
+releaseNotesUrl: https://github.com/pangeacyber/pangea-extensions-firebase/blob/main/firestore-audit-log/CHANGELOG.md
 
 author:
   authorName: Pangea Cyber
