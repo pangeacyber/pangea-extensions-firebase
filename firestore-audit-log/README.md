@@ -1,8 +1,8 @@
-# Translate Text
+# Secure Audit Logging
 
 **Author**: Pangea Cyber (**[https://pangea.cloud](https://pangea.cloud)**)
 
-**Description**: Redact sensitive text from strings written to a Cloud Firestore collection (uses the Pangea Redact API).
+**Description**: Record security critical app events using Pangea Secure Audit Log service by writing to a specified Cloud Firestore collection (uses the Pangea Secure Audit Log API).
 
 
 
@@ -50,38 +50,30 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
 
 
 
-
 **Configuration Parameters:**
 
 * Cloud Functions location: Where do you want to deploy the functions created for this extension? You usually want a location close to your database. For help selecting a location, refer to the [location selection guide](https://firebase.google.com/docs/functions/locations).
 
-
-* Collection path: What is the path to the collection that contains the strings that you want to redact?
-
-
-* Input field name: What is the name of the field that contains the string that you want to redact?
+* Collection path: What is the path to the collection that contains the strings that you want to log?
 
 
-* Redaction output field name: What is the name of the field where you want to store your redacted text?
+* Input field name: What is the name of the field that contains the messages that you want to log?
 
 
-* Pangea service domain: Where is your Pangea Service is deployed?
+* Response output field name: What is the name of the field where you want to store response from the Secure Audit Log service?
 
 
-* Pangea Auth Token: A Pangea Auth Token with access to the Secure Audit Log service.
+* Pangea service base domain: The base domain of where your Pangea Service is deployed. The **Domain** value can be copied from the main dashboard of the [Pangea Console](https://console.pangea.cloud).
+
+
+* Pangea Auth Token with access to the Secure Audit Log service: The Pangea Token to use to authenticate access to the Pangea Redact service. The **Token** value can be copied from the [Secure Audit Log Dashboard](https://console.pangea.cloud/service/audit) of the Pangea Console.
 
 
 
 
 **Cloud Functions:**
 
-* **fslog:** Listens for writes of new strings to your specified Cloud Firestore collection, redact sensitive text from the strings based on defined rulesets, then writes the translated strings back to the same document.
-
-
-
-**APIs Used**:
-
-* redact.aws.us.pangea.cloud/v1/redact (Reason: To use the Pangea Redact Service to redact text from strings.)
+* **fslog:** Listens for writes of new strings to your specified Cloud Firestore collection, records them using the Secure Audit Log service, a hash of each log entry will be recorded on a immutable and tamperproof blockchian which can later be cryptographically verified for authenticity
 
 
 
@@ -91,4 +83,4 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
 
 This extension will operate with the following project IAM roles:
 
-* datastore.user (Reason: Allows the extension to write redacted strings to Cloud Firestore.)
+* datastore.user (Reason: Allows the extension to write Secure Audit Log response to Cloud Firestore.)
