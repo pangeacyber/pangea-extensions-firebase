@@ -54,9 +54,9 @@ const eventChannel =
 logs.init();
 
 /**
- * When a file is uploaded in the Storage bucket, we generate a check the file
- * againt a database of 25 million known malicious files, and neaturalize the it
- * in a gzip formatted container if it is deemed malicious.
+ * When a file is uploaded to the Storage bucket, we check the file againts
+ * a database of 25 million known malicious files, if it is deemed malicious,
+ * neaturalize it by moving it to gzip formatted container.
  */
 export const checkFileReputation = functions.storage
   .object()
@@ -127,11 +127,11 @@ export const checkFileReputation = functions.storage
           options
         );
 
-        if(response.success) {
+        if (response.success) {
           logs.threatVerdict(response.result.data.verdict);
 
-          if(response.result.data.verdict === threatVerdict.unknown)
-            return;
+        if (response.result.data.verdict === threatVerdict.unknown)
+          return;
 
           isMalicious = true;
           objectMetadata.metadata.threatCategory = response.result.data.category;

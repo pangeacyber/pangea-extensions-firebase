@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
+import config from "./config";
+import * as logs from "./logs";
+
 import * as os from "os";
 import * as path from "path";
 import * as fs from "fs";
 import * as Archiver from 'archiver';
 import * as ArchiverEncrypted from 'archiver-zip-encrypted';
-Archiver.registerFormat('zip-encrypted', ArchiverEncrypted);
+if(config.zipPassword !== undefined)
+  Archiver.registerFormat('zip-encrypted', ArchiverEncrypted);
 
 import { Bucket } from "@google-cloud/storage";
 import { ObjectMetadata } from "firebase-functions/lib/providers/storage";
 import { uuid } from "uuidv4";
-
-import config from "./config";
-import * as logs from "./logs";
 
 export interface IsolateFileResult {
   outputFilePath: string;
@@ -49,6 +50,8 @@ export const isolateFile = async ({
     dir: fileDir,
     name: fileNameWithoutExtension,
   } = parsedPath;
+
+  console.log("zipPassword = " + config.zipPassword);
 
   logs.isolatingFile(originalFile);
 
@@ -94,12 +97,20 @@ export const isolateFile = async ({
     const createZip = new Promise((resolve, reject) => {
       // create a file to stream archive data to.
       const output = fs.createWriteStream(modifiedFile);
-      // create archive and specify method of encryption and password
-      let archive = Archiver.create('zip-encrypted', {
-        zlib: { level: 8 },
-        encryptionMethod: 'aes256',
-        password: config.zipPassword
-      });
+
+      let archive;
+      if (config.zipPassword === undefined) {
+        archive = Archiver('zip', {
+          zlib: { level: 8 }
+        });
+      } else {
+        // create archive and specify method of encryption and password
+        archive = Archiver.create('zip-encrypted', {
+          zlib: { level: 8 },
+          encryptionMethod: 'aes256',
+          password: config.zipPassword
+        });
+      }
 
       // listen for all archive data to be written
       output.on('close', function() {
@@ -117,7 +128,7 @@ export const isolateFile = async ({
     });
 
     // synchronously call create the zip file
-    await createZip;
+    await createZip();
 
     if (fs.existsSync(modifiedFile)) {
       logs.createdFile(modifiedFile);
