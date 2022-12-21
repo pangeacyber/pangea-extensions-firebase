@@ -18,7 +18,7 @@ specVersion: v1beta
 
 displayName: File Reputation Scanning
 description:
-  Scans files uploaded to Cloud Storage to for known malicious behavior, isolates the file in a gzip formatted container if deemed malicious, and optionally keeps or deletes the original file.
+  Scans files uploaded to Cloud Storage for known malicious behavior, isolates the file in a gzip formatted container if deemed malicious, and optionally keeps or deletes the original file.
 
 license: Apache-2.0
 
@@ -172,6 +172,20 @@ params:
     validationErrorMessage:
       Invalid paths, must be a comma-separated list of absolute path values.
     required: false
+
+  - param: DELETE_ORIGINAL_FILE
+    label: Deletion of original file
+    description: >-
+      Do you want to automatically delete the original file from the Cloud Storage
+      bucket if it deemed malicious? Note that these deletions cannot be undone.
+    type: select
+    options:
+      - label: Delete
+        value: true
+      - label: Don't delete
+        value: false
+    default: true
+    required: true
 
   - param: INCLUDE_PATH_LIST
     label: Paths that contain files you want to scan for malious behavior

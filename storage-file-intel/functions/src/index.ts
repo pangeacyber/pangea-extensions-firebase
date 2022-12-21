@@ -93,6 +93,7 @@ export const checkFileReputation = functions.storage
 
     let originalFile;
     let remoteFile;
+    var isMalicious = false;
     try {
       originalFile = path.join(os.tmpdir(), filePath);
       const tempLocalDir = path.dirname(originalFile);
@@ -108,7 +109,6 @@ export const checkFileReputation = functions.storage
       await remoteFile.download({ destination: originalFile });
       logs.fileDownloaded(filePath, originalFile);
 
-      //const tasks: Promise<PangeaResponse<Response>>[] = [];
       const tasks: Promise<IsolateFileResult>[] = [];
 
       const fileBuffer = fs.readFileSync(originalFile);
@@ -128,8 +128,16 @@ export const checkFileReputation = functions.storage
         if(response.success) {
           logs.threatVerdict(response.result.data.verdict);
 
-          if(response.result.data.verdict !== threatVerdict.unknown)
+          if(response.result.data.verdict === threatVerdict.unknown)
             return;
+
+          isMalicious = true;
+          objectMetadata.metadata.threatCategory = response.result.data.category;
+          objectMetadata.metadata.threatScore = response.result.data.score;
+          objectMetadata.metadata.threatVerdict = response.result.data.verdict;
+          objectMetadata.metadata.threatProvider =  response.result.parameters.provider;
+          objectMetadata.metadata.fileHashType =  response.result.parameters.hash_type;
+          objectMetadata.metadata.fileHash =  response.result.parameters.hash;
 
           tasks.push(
             isolateFile({
@@ -185,7 +193,7 @@ export const checkFileReputation = functions.storage
         fs.unlinkSync(originalFile);
         logs.tempOriginalFileDeleted(filePath);
       }
-      if (config.deleteOriginalFile === deleteImage.always) {
+      if (config.deleteOriginalFile === deleteImage.always && isMalicious) {
         // Delete the original file
         if (remoteFile) {
           try {

@@ -2,7 +2,7 @@
 
 **Author**: Pangea Cyber (**[https://pangea.cloud](https://pangea.cloud)**)
 
-**Description**: Scans files uploaded to Cloud Storage to for known malicious behavior, isolates the file in a gzip formatted container if deemed malicious, and optionally keeps or deletes the original file.
+**Description**: Scans files uploaded to Cloud Storage for known malicious behavior, isolates the file in a gzip formatted container if deemed malicious, and optionally keeps or deletes the original file.
 
 
 
@@ -64,6 +64,8 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
 
 * Absolute path to move the zipped malicious files: An absolute path in which to store the gzip file that contains the malicious file that was uploaded. For example, if you specify a path here of `/malicious` and a file is uploaded to `/documents/virus.exe`, then the zip file is stored at `/malicious/virus_exe.zip`. If you prefer to store isolated files at the root of your bucket, leave this field empty.
 
+
+* Deletion of original file: Do you want to automatically delete the original file from the Cloud Storage bucket if it deemed malicious? Note that these deletions cannot be undone.
 
 * Paths that contain files you want to scan for malious behavior: Restrict pangea-file-intel to only scan files in specific locations in your Storage bucket by supplying a comma-separated list of absolute paths. For example, to only scan files stored in the `/users/uploads` and `/user/inbox` directories, specify the paths `/users/uploads,/user/inbox`.
 You may also use wildcard notation for directories in the path. For example, `/users/*/uploads` would match `/users/user1/uploads/image.png` as well as  `/users/user2/uploads/any/sub/directory/image.png`.
