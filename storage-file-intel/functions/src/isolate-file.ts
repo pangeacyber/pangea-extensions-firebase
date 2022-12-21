@@ -17,7 +17,9 @@
 import * as os from "os";
 import * as path from "path";
 import * as fs from "fs";
-import * as AdmZip from 'adm-zip';
+import * as Archiver from 'archiver';
+import * as ArchiverEncrypted from 'archiver-zip-encrypted';
+Archiver.registerFormat('zip-encrypted', ArchiverEncrypted);
 
 import { Bucket } from "@google-cloud/storage";
 import { ObjectMetadata } from "firebase-functions/lib/providers/storage";
@@ -89,16 +91,37 @@ export const isolateFile = async ({
       metadata.metadata.firebaseStorageDownloadTokens = uuid();
     }
 
-    // zip file
-    var zip = new AdmZip();
+    const createZip = new Promise((resolve, reject) => {
+      // create a file to stream archive data to.
+      const output = fs.createWriteStream(modifiedFile);
+      // create archive and specify method of encryption and password
+      let archive = Archiver.create('zip-encrypted', {
+        zlib: { level: 8 },
+        encryptionMethod: 'aes256',
+        password: config.zipPassword
+      });
 
-    // add the malious file to the zip file to isolated it
-    zip.addLocalFile(originalFile);
+      // listen for all archive data to be written
+      output.on('close', function() {
+        console.log(archive.pointer() + ' total bytes');
+        console.log('archiver has been finalized and the output file descriptor has closed.');
+        resolve();
+      });
 
-    // Write zip file to disk
-    zip.writeZip(modifiedFile);
+      // pipe archive data to the file
+      archive.pipe(output);
+      // append a file
+      archive.file(originalFile, { name: fileNameWithoutExtension +  fileExtension});
+      // finalize the archive ('close', 'end' or 'finish' may be fired right after calling this method)
+      archive.finalize();
+    });
 
-    logs.createdFile(modifiedFile);
+    // synchronously call create the zip file
+    await createZip;
+
+    if (fs.existsSync(modifiedFile)) {
+      logs.createdFile(modifiedFile);
+    }
 
     // Uploading the zip file back to the bucket.
     logs.fileUploading(modifiedFilePath);
@@ -116,9 +139,9 @@ export const isolateFile = async ({
     try {
       // Make sure the local zip file is cleaned up to free up disk space.
       if (modifiedFile) {
-        logs.tempResizedFileDeleting(modifiedFilePath);
+        logs.tempFileDeleting(modifiedFilePath);
         fs.unlinkSync(modifiedFile);
-        logs.tempResizedFileDeleted(modifiedFilePath);
+        logs.tempFileDeleted(modifiedFilePath);
       }
     } catch (err) {
       logs.errorDeleting(err);

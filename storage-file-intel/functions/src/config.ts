@@ -38,9 +38,10 @@ function paramToArray(param) {
 export default {
   bucket: process.env.IMG_BUCKET,
   ioslationPath: process.env.ISOLATION_PATH,
+  zipPassword: process.env.ZIP_PASSWORD,
+  deleteOriginalFile: deleteOriginalFile(process.env.DELETE_ORIGINAL_FILE),
   includePathList: paramToArray(process.env.INCLUDE_PATH_LIST),
   excludePathList: paramToArray(process.env.EXCLUDE_PATH_LIST),
-  deleteOriginalFile: deleteOriginalFile(process.env.DELETE_ORIGINAL_FILE),
   pangeaDomain: process.env.PANGEA_DOMAIN,
   pangeaToken: process.env.PANGEA_FILE_INTEL_TOKEN
 };

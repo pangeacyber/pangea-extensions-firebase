@@ -54,16 +54,18 @@ const eventChannel =
 logs.init();
 
 /**
- * When an image is uploaded in the Storage bucket, we generate a resized image automatically using
- * the Sharp image converting library.
+ * When a file is uploaded in the Storage bucket, we generate a check the file
+ * againt a database of 25 million known malicious files, and neaturalize the it
+ * in a gzip formatted container if it is deemed malicious.
  */
 export const checkFileReputation = functions.storage
   .object()
   .onFinalize(async (object): Promise<void> => {
     logs.start();
-    const { contentType } = object; // This is the image MIME type
-
-    const tmpFilePath = path.resolve("/", path.dirname(object.name)); // Absolute path to dirname
+    // This is the file MIME type
+    const { contentType } = object;
+    // Absolute path to dirname
+    const tmpFilePath = path.resolve("/", path.dirname(object.name));
 
     if (
       config.includePathList &&
@@ -87,7 +89,8 @@ export const checkFileReputation = functions.storage
     }
 
     const bucket = admin.storage().bucket(object.bucket);
-    const filePath = object.name; // File path in the bucket.
+    // File path in the bucket.
+    const filePath = object.name;
     const parsedPath = path.parse(filePath);
     const objectMetadata = object;
 
@@ -123,7 +126,6 @@ export const checkFileReputation = functions.storage
           "sha256",
           options
         );
-        console.log(response.result);
 
         if(response.success) {
           logs.threatVerdict(response.result.data.verdict);

@@ -107,12 +107,12 @@ export const tempOriginalFileDeleting = (path: string) => {
   logger.log(`Deleting temporary original file: '${path}'`);
 };
 
-export const tempResizedFileDeleted = (path: string) => {
-  logger.log(`Deleted temporary resized file: '${path}'`);
+export const tempFileDeleted = (path: string) => {
+  logger.log(`Deleted temporary file: '${path}'`);
 };
 
-export const tempResizedFileDeleting = (path: string) => {
-  logger.log(`Deleting temporary resized file: '${path}'`);
+export const tempFileDeleting = (path: string) => {
+  logger.log(`Deleting temporary file: '${path}'`);
 };
 
 export const remoteFileDeleted = (path: string) => {
