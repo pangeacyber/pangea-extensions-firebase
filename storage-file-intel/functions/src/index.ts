@@ -54,16 +54,18 @@ const eventChannel =
 logs.init();
 
 /**
- * When an image is uploaded in the Storage bucket, we generate a resized image automatically using
- * the Sharp image converting library.
+ * When a file is uploaded to the Storage bucket, we check the file againts
+ * a database of 25 million known malicious files, if it is deemed malicious,
+ * neaturalize it by moving it to gzip formatted container.
  */
 export const checkFileReputation = functions.storage
   .object()
   .onFinalize(async (object): Promise<void> => {
     logs.start();
-    const { contentType } = object; // This is the image MIME type
-
-    const tmpFilePath = path.resolve("/", path.dirname(object.name)); // Absolute path to dirname
+    // This is the file MIME type
+    const { contentType } = object;
+    // Absolute path to dirname
+    const tmpFilePath = path.resolve("/", path.dirname(object.name));
 
     if (
       config.includePathList &&
@@ -87,12 +89,14 @@ export const checkFileReputation = functions.storage
     }
 
     const bucket = admin.storage().bucket(object.bucket);
-    const filePath = object.name; // File path in the bucket.
+    // File path in the bucket.
+    const filePath = object.name;
     const parsedPath = path.parse(filePath);
     const objectMetadata = object;
 
     let originalFile;
     let remoteFile;
+    var isMalicious = false;
     try {
       originalFile = path.join(os.tmpdir(), filePath);
       const tempLocalDir = path.dirname(originalFile);
@@ -108,7 +112,6 @@ export const checkFileReputation = functions.storage
       await remoteFile.download({ destination: originalFile });
       logs.fileDownloaded(filePath, originalFile);
 
-      //const tasks: Promise<PangeaResponse<Response>>[] = [];
       const tasks: Promise<IsolateFileResult>[] = [];
 
       const fileBuffer = fs.readFileSync(originalFile);
@@ -123,13 +126,20 @@ export const checkFileReputation = functions.storage
           "sha256",
           options
         );
-        console.log(response.result);
 
-        if(response.success) {
+        if (response.success) {
           logs.threatVerdict(response.result.data.verdict);
 
-          if(response.result.data.verdict !== threatVerdict.unknown)
-            return;
+        if (response.result.data.verdict === threatVerdict.unknown)
+          return;
+
+          isMalicious = true;
+          objectMetadata.metadata.threatCategory = response.result.data.category;
+          objectMetadata.metadata.threatScore = response.result.data.score;
+          objectMetadata.metadata.threatVerdict = response.result.data.verdict;
+          objectMetadata.metadata.threatProvider =  response.result.parameters.provider;
+          objectMetadata.metadata.fileHashType =  response.result.parameters.hash_type;
+          objectMetadata.metadata.fileHash =  response.result.parameters.hash;
 
           tasks.push(
             isolateFile({
@@ -185,7 +195,7 @@ export const checkFileReputation = functions.storage
         fs.unlinkSync(originalFile);
         logs.tempOriginalFileDeleted(filePath);
       }
-      if (config.deleteOriginalFile === deleteImage.always) {
+      if (config.deleteOriginalFile === deleteImage.always && isMalicious) {
         // Delete the original file
         if (remoteFile) {
           try {

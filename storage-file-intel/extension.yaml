@@ -18,7 +18,7 @@ specVersion: v1beta
 
 displayName: File Reputation Scanning
 description:
-  Scans files uploaded to Cloud Storage to for known malicious behavior, isolates the file in a gzip formatted container if deemed malicious, and optionally keeps or deletes the original file.
+  Scans files uploaded to Cloud Storage for known malicious behavior, isolates the file in a gzip formatted container if deemed malicious, and optionally keeps or deletes the original file.
 
 license: Apache-2.0
 
@@ -53,6 +53,7 @@ resources:
     properties:
       location: ${param:LOCATION}
       runtime: nodejs14
+      timeout: 540s
       availableMemoryMb: ${param:FUNCTION_MEMORY}
       eventTrigger:
         eventType: google.storage.object.finalize
@@ -162,7 +163,7 @@ params:
   - param: ISOLATION_PATH
     label: Absolute path to move the zipped malicious files
     description: >
-      An absolute path in which to store the gzip file that contains the malicious file that was uploaded. For example,
+      An absolute path in which to store the gzip container used to neturalize the malicious file that was uploaded. For example,
       if you specify a path here of `/malicious` and a file is uploaded to `/documents/virus.exe`, then the zip file is stored at
       `/malicious/virus_exe.zip`. If you prefer to store isolated files at the root of your bucket, leave this field empty.
     type: string
@@ -172,6 +173,34 @@ params:
     validationErrorMessage:
       Invalid paths, must be a comma-separated list of absolute path values.
     required: false
+
+  - param: ZIP_PASSWORD
+    label: A password to protect the gzip container
+    description: >
+      A password to protect the gzip container used to neturalize the malicious file that was uploaded.
+      The password will be required to extract the gzip container and analyze the malicious file.
+      If you prefer not to password protect your gzip file, leave this field empty.
+    type: string
+    example: "Passw0rd!"
+    default: ""
+#      validationRegex: ^(\/[^\s\/\,]+)+(\,(\/[^\s\/\,]+)+)*$
+#      validationErrorMessage:
+#        Invalid paths, must be a comma-separated list of absolute path values.
+    required: false
+
+  - param: DELETE_ORIGINAL_FILE
+    label: Deletion of original file
+    description: >-
+      Do you want to automatically delete the original file from the Cloud Storage
+      bucket if it deemed malicious? Note that these deletions cannot be undone.
+    type: select
+    options:
+      - label: Delete
+        value: true
+      - label: Don't delete
+        value: false
+    default: true
+    required: true
 
   - param: INCLUDE_PATH_LIST
     label: Paths that contain files you want to scan for malious behavior
