@@ -128,7 +128,7 @@ export const isolateFile = async ({
     });
 
     // synchronously call create the zip file
-    await createZip();
+    await createZip;
 
     if (fs.existsSync(modifiedFile)) {
       logs.createdFile(modifiedFile);
