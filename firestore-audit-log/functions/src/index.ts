@@ -116,7 +116,7 @@ const handleUpdateDocument = async (
     return;
   }
 
-  // If updated document has no string or object input, delete any existing translations.
+  // If updated document has no string or object input, delete any existing responses.
   if (typeof inputAfter !== "string" && typeof inputAfter !== "object") {
     await updateResponse(after, admin.firestore.FieldValue.delete());
     logs.documentUpdatedDeletedInput();
@@ -137,7 +137,13 @@ const logSingle = async (
 ): Promise<void> => {
   logs.auditSingleString(input);
   try {
-    const response = await logString(input);
+    const response =
+      typeof input === "object"
+        ? await logObject(input)
+        : typeof input === "string"
+          ? await logObject({ message: input})
+          : null ;
+
     return updateResponse(snapshot, response);
   } catch (err) {
     logs.auditSingleStringError(input, err);
@@ -149,23 +155,24 @@ const logMultiple = async (
   input: object,
   snapshot: admin.firestore.DocumentSnapshot
 ): Promise<void> => {
-  let translations = {};
+  let responses = {};
   let promises = [];
 
   logs.auditMultipleStrings(input);
 
-  Object.entries(input).forEach(([input, value]) => {
+  Object.entries(input).forEach(([index, value]) => {
       promises.push(
         () =>
           new Promise<void>(async (resolve) => {
 
-            const output =
-              typeof value === "string"
-                ? await logString(value)
-                : null;
+          const output =
+            typeof input === "object"
+              ? await logObject(value)
+              : typeof input === "string"
+                ? await logObject({ message: value})
+                : null ;
 
-            translations[input] = output;
-
+            responses[index] = output;
             return resolve();
           })
       );
@@ -177,7 +184,7 @@ const logMultiple = async (
 
   logs.auditMultipleStringsComplete(input);
 
-  return updateResponse(snapshot, translations);
+  return updateResponse(snapshot, responses);
 };
 
 const logDocument = async (
@@ -185,29 +192,26 @@ const logDocument = async (
 ): Promise<void> => {
   const input: any = extractInput(snapshot);
 
-  if (typeof input === "object") {
+  if (Array.isArray(input)) {
     return logMultiple(input, snapshot);
-  }
-
-  await logSingle(input, snapshot);
+  } else {
+    await logSingle(input, snapshot);
+ }
 };
 
-const logString = async (
-  string: string
+const logObject = async (
+  input: object,
 ): Promise<any> => {
   try {
-    logs.auditInputString(string);
+    logs.auditInputString(JSON.stringify(input));
 
-    const data = {
-      message: string,
-    };
-
-    const response = await audit.log(data);
+    const response = await audit.log(input);
     logs.auditStringComplete(response.result);
 
     return response.result;
   } catch (err) {
-    logs.auditStringError(string, err);
+    logs.auditStringError(JSON.stringify(input), err);
+    return err;
     throw err;
   }
 };
