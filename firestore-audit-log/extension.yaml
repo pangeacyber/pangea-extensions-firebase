@@ -58,6 +58,19 @@ resources:
         eventType: providers/cloud.firestore/eventTypes/document.write
         resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${param:COLLECTION_PATH}/{messageId}
 
+  - name: onmaliciousfiledetected
+    type: firebaseextensions.v1beta.v2function
+    properties:
+      location: ${param:LOCATION}
+      buildConfig:
+        runtime: nodejs14
+      serviceConfig:
+        availableMemory: 512M
+        timeoutSeconds: 60
+      eventTrigger:
+        eventType: firebase.extensions.pangea-file-intel.v1.complete
+        channel: projects/${param:PROJECT_ID}/locations/${param:LOCATION}/channels/firebase
+
 params:
   - param: LOCATION
     label: Cloud Functions location

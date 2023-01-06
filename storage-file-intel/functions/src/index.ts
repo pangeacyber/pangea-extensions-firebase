@@ -97,6 +97,9 @@ export const checkFileReputation = functions.storage
     let originalFile;
     let remoteFile;
     var isMalicious = false;
+
+    var isolateResult: IsolateFileResult;
+
     try {
       originalFile = path.join(os.tmpdir(), filePath);
       const tempLocalDir = path.dirname(originalFile);
@@ -112,13 +115,13 @@ export const checkFileReputation = functions.storage
       await remoteFile.download({ destination: originalFile });
       logs.fileDownloaded(filePath, originalFile);
 
-      const tasks: Promise<IsolateFileResult>[] = [];
-
+      // Generate file hash
       const fileBuffer = fs.readFileSync(originalFile);
       const hashSum = crypto.createHash('sha256');
       hashSum.update(fileBuffer);
       const fileHash = hashSum.digest('hex');
 
+      // Look up the file using the Pangea File Intel service
       const options = { provider: "reversinglabs", verbose: true, raw: true };
       try {
         const response = await fileIntel.lookup(
@@ -130,26 +133,27 @@ export const checkFileReputation = functions.storage
         if (response.success) {
           logs.threatVerdict(response.result.data.verdict);
 
+        // Ignore the file if it is not known to be a threat
         if (response.result.data.verdict === threatVerdict.unknown)
           return;
 
-          isMalicious = true;
-          objectMetadata.metadata.threatCategory = response.result.data.category;
-          objectMetadata.metadata.threatScore = response.result.data.score;
-          objectMetadata.metadata.threatVerdict = response.result.data.verdict;
-          objectMetadata.metadata.threatProvider =  response.result.parameters.provider;
-          objectMetadata.metadata.fileHashType =  response.result.parameters.hash_type;
-          objectMetadata.metadata.fileHash =  response.result.parameters.hash;
+        // Record the file's metadata in the Firebase Storage
+        isMalicious = true;
+        objectMetadata.metadata.threatCategory = response.result.data.category;
+        objectMetadata.metadata.threatScore = response.result.data.score;
+        objectMetadata.metadata.threatVerdict = response.result.data.verdict;
+        objectMetadata.metadata.threatProvider =  response.result.parameters.provider;
+        objectMetadata.metadata.fileHashType =  response.result.parameters.hash_type;
+        objectMetadata.metadata.fileHash =  response.result.parameters.hash;
 
-          tasks.push(
-            isolateFile({
-              bucket,
-              originalFile,
-              parsedPath,
-              objectMetadata: objectMetadata,
-            }));
+        // Neaturalize the file
+        isolateResult = await isolateFile({
+            bucket,
+            originalFile,
+            parsedPath,
+            objectMetadata: objectMetadata,
+          });
         }
-
       } catch (e) {
         if (e instanceof PangeaErrors.APIError) {
           console.log("Error", e.summary, e.errors);
@@ -158,19 +162,17 @@ export const checkFileReputation = functions.storage
         }
       }
 
-      const results = await Promise.all(tasks);
       eventChannel &&
         (await eventChannel.publish({
           type: "firebase.extensions.pangea-file-intel.v1.complete",
           subject: filePath,
           data: {
             input: object,
-            outputs: results,
+            output: isolateResult,
           },
         }));
 
-      const failed = results.some((result) => result.success === false);
-      if (failed) {
+      if (isolateResult.success === false) {
         logs.failed();
         return;
       } else {

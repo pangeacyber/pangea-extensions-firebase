@@ -51,8 +51,6 @@ export const isolateFile = async ({
     name: fileNameWithoutExtension,
   } = parsedPath;
 
-  console.log("zipPassword = " + config.zipPassword);
-
   logs.isolatingFile(originalFile);
 
   let modifiedFileName = `${fileNameWithoutExtension}_${fileExtension.slice(1)}.zip`;

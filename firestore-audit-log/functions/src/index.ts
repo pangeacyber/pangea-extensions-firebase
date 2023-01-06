@@ -16,6 +16,7 @@
 
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
+import * as functionsV2 from "firebase-functions/v2";
 import {PangeaConfig, AuditService} from "pangea-node-sdk"
 
 import config from "./config";
@@ -212,7 +213,6 @@ const logObject = async (
   } catch (err) {
     logs.auditStringError(JSON.stringify(input), err);
     return err;
-    throw err;
   }
 };
 
@@ -230,3 +230,18 @@ const updateResponse = async (
 
   logs.updateDocumentComplete(snapshot.ref.path);
 };
+
+export const onmaliciousfiledetected = functionsV2.eventarc.onCustomEventPublished(
+  "firebase.extensions.pangea-file-intel.v1.complete",
+  async (event) => {
+    //console.log(JSON.stringify(event))
+    return await logObject({
+      message: `Malicious file '${event.subject}' neaturalize to path '${event.data.output.outputFilePath}'.`,
+      actor: event.source,
+      action: "Neaturalized",
+      target: event.data.output.outputFilePath,
+      source: event.subject,
+      status: event.data.input.metadata.threatVerdict
+    });
+  }
+);
