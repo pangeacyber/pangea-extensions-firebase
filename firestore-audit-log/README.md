@@ -6,32 +6,71 @@
 
 
 
-**Details**: Use this extension to redact sensitive text from strings (based on defined rules) written to a Cloud Firestore collection.
+**Details**: Use this extension to securely log sensitive events using Pangea tamperproof Secure Audit Log service by writing log messages to a Cloud Firestore collection.
 
-This extension listens to your specified Cloud Firestore collection. If you add a string to a specified field in any document within that collection, this extension:
+This extension listens to your specified Cloud Firestore collection. If you add a string or event object map to a specified field in any document within that collection, this extension:
 
-- Redacts text from the string based on the rulesets configured in the Pangea Console [Redact Dashboard](https://console.pangea.cloud/service/redact); Redacted text is also replaced with predefined tags.  
-- Adds the Redacted version(s) of the string to a separate specified field in the same document.
+- Securely Logs the string or event using the Pangea Secure Audit Log service. Logs can later be viewed using the Pangea Dashboard [Secure Audit Log Viewer](https://console.pangea.cloud/service/audit/logs).  
+- Hashes of each log entry will be recorded on a tamperproof blockchain and can be cryptographically verified for authenticity.
 
-You specify the desired data types to redact such as names, email addresses, phone numbers, social security numbers, crypto keys, medical licenses, or customized your own types. You can find a list of predefined rulesets on the Pangea Console [Redact Dashboard](https://console.pangea.cloud/service/redact).
+You can specify the desired metadata types in addition to the message for each log entry, such as, actor, action, source, target, and status. For more information on the Pangea Secure Audit Log service reference the [Documentation](https://pangea.cloud/docs/audit/).
 
-If the original non-redacted field of the document is updated, then the redactions will be automatically updated, as well.
+If the original input field of the document is updated, a new log entry will be automatically created.
 
-#### Multiple collections for redactions
+#### Logging messages
 
-To redact multiple collections, install this extension multiple times, specifying a different
-collection path each time. There is currently no limit on how many instances of an extension you
-can install.
-
-#### Multiple field redactions
-
-To redact multiple fields, store a map of input strings in the input field:
+Each log is comprised of a set of fields designed to record specific components of the activity being recorded. The only required field is message, with all others being optional.
 
 ```js
-admin.firestore().collection('redact').add({
-  first: "My name is Bob",
-  second: "My phone number is 415-555-5555"
+admin.firestore().collection('audit').add("Record created");
+```
+
+#### Logging messages with optional metadata
+
+To create an entry with optional metadata fields, store a map containing the optional fields as keys and values as strings.
+
+```js
+admin.firestore().collection('audit').add({
+  message: "Record created with metadata",
+  actor:  "User 1",
+  action: "Create",
+  source: "Firebase client",
+  target: "Database",
+  status: "Completed",
 })
+```
+
+#### Multiple log entries
+
+To log multiple entries, store an array of either maps or strings:
+
+```js
+admin.firestore().collection('audit').add([
+  {
+    message: "First record created",
+    actor:  "User 1",
+    action: "Create",
+    source: "Firebase client",
+    target: "Database",
+    status: "Completed",
+  },
+  {
+    message: "Second record created",
+    actor:  "User 1",
+    action: "Create",
+    source: "Firebase client",
+    target: "Database",
+    status: "Completed",
+  },
+  {
+    message: "Third record created",
+    actor:  "User 1",
+    action: "Create",
+    source: "Firebase client",
+    target: "Database",
+    status: "Completed",
+  }
+])
 ```
 
 #### Additional setup
@@ -47,12 +86,20 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
   - Cloud Firestore
   - Cloud Functions (Node.js 10+ runtime. [See FAQs](https://firebase.google.com/support/faq#extensions-pricing))
 
+Usage of this extension also requires you to have a [Pangea](https://pangea.cloud/signup?utm_medium=google-marketplace&utm_source=marketplace&utm_campaign=firebase-extension-audit) account. You are responsible for any associated costs with your usage of Pangea.
+
 
 
 
 **Configuration Parameters:**
 
 * Cloud Functions location: Where do you want to deploy the functions created for this extension? You usually want a location close to your database. For help selecting a location, refer to the [location selection guide](https://firebase.google.com/docs/functions/locations).
+
+* Pangea service base domain: The base domain of where your Pangea Service is deployed. The **Domain** value can be copied from the main dashboard of the [Pangea Console](https://console.pangea.cloud).
+
+
+* Pangea Auth Token with access to the Secure Audit Log service: The Pangea Token to use to authenticate access to the Pangea Redact service. The **Token** value can be copied from the [Secure Audit Log Dashboard](https://console.pangea.cloud/service/audit) of the Pangea Console.
+
 
 * Collection path: What is the path to the collection that contains the strings that you want to log?
 
@@ -63,17 +110,17 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
 * Response output field name: What is the name of the field where you want to store response from the Secure Audit Log service?
 
 
-* Pangea service base domain: The base domain of where your Pangea Service is deployed. The **Domain** value can be copied from the main dashboard of the [Pangea Console](https://console.pangea.cloud).
-
-
-* Pangea Auth Token with access to the Secure Audit Log service: The Pangea Token to use to authenticate access to the Pangea Redact service. The **Token** value can be copied from the [Secure Audit Log Dashboard](https://console.pangea.cloud/service/audit) of the Pangea Console.
-
-
 
 
 **Cloud Functions:**
 
 * **fslog:** Listens for writes of new strings to your specified Cloud Firestore collection, records them using the Secure Audit Log service, a hash of each log entry will be recorded on a immutable and tamperproof blockchian which can later be cryptographically verified for authenticity
+
+
+
+**Other Resources**:
+
+* onmaliciousfiledetected (firebaseextensions.v1beta.v2function)
 
 
 

@@ -24,7 +24,7 @@ For example, say that you specify to monitor the bucket '_my-project.appspot.com
 
 #### Additional setup
 
-Before installing this extension, make sure that you've [set up a Cloud Storage bucket](https://firebase.google.com/docs/storage) in your Firebase project.
+Before installing this extension, make sure that you have signed up for a free [Pangea](https://pangea.cloud/signup?utm_medium=google-marketplace&utm_source=marketplace&utm_campaign=firebase-extension-audit) account and have [set up a Cloud Storage bucket](https://firebase.google.com/docs/storage) in your Firebase project.
 
 > **NOTE**: As mentioned above, this extension listens for all changes made to the specified Cloud Storage bucket. This may cause unnecessary function calls. It is recommended to create a separate Cloud Storage bucket, especially for images you want to resize, and set up this extension to listen to that bucket.
 
@@ -46,6 +46,14 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
  - Cloud Functions (Node.js 10+ runtime. [See FAQs](https://firebase.google.com/support/faq#extensions-pricing))
 - If you enable events [Eventarc fees apply](https://cloud.google.com/eventarc/pricing).
 
+To install an extension, your project must be on the [Blaze (pay as you go) plan](https://firebase.google.com/pricing)
+
+- You will be charged a small amount (typically around $0.01/month) for the Firebase resources required by this extension (even if it is not used).
+- This extension uses other Firebase and Google Cloud Platform services, which have associated charges if you exceed the service’s no-cost tier:
+  - Cloud Functions (Node.js 10+ runtime. See [FAQs](https://firebase.google.com/support/faq#expandable-24))
+
+Usage of this extension also requires you to have a [Pangea](https://pangea.cloud/signup?utm_medium=google-marketplace&utm_source=marketplace&utm_campaign=firebase-extension-file-intel) account. You are responsible for any associated costs with your usage of Pangea.
+
 
 
 
@@ -62,7 +70,10 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
 * Cloud Storage bucket for images: To which Cloud Storage bucket will you upload files that you want to scan for malicious behavior? Files deemed malicious are copied into in a gzip formatted container and the original is then either kept or deleted, depending on your extension configuration. Isolated files will also be stored in this bucket. It is recommended to create a separate bucket for this extension. For more information, refer to the [pre-installation guide](https://firebase.google.com/products/extensions/pangea-file-intel).
 
 
-* Absolute path to move the zipped malicious files: An absolute path in which to store the gzip file that contains the malicious file that was uploaded. For example, if you specify a path here of `/malicious` and a file is uploaded to `/documents/virus.exe`, then the zip file is stored at `/malicious/virus_exe.zip`. If you prefer to store isolated files at the root of your bucket, leave this field empty.
+* Absolute path to move the zipped malicious files: An absolute path in which to store the gzip container used to neturalize the malicious file that was uploaded. For example, if you specify a path here of `/malicious` and a file is uploaded to `/documents/virus.exe`, then the zip file is stored at `/malicious/virus_exe.zip`. If you prefer to store isolated files at the root of your bucket, leave this field empty.
+
+
+* A password to protect the gzip container: A password to protect the gzip container used to neturalize the malicious file that was uploaded. The password will be required to extract the gzip container and analyze the malicious file. If you prefer not to password protect your gzip file, leave this field empty.
 
 
 * Deletion of original file: Do you want to automatically delete the original file from the Cloud Storage bucket if it deemed malicious? Note that these deletions cannot be undone.
