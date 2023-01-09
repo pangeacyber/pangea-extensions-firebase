@@ -139,6 +139,7 @@ params:
     label: A Pangea Auth Token with access to the File Intel service
     description: >
       Used to authenticate access to Pangea services.
+    type: secret
     example: pts_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 #    default:
     validationRegex: "^pts_[a-z2-7]{32}$"
@@ -180,7 +181,7 @@ params:
       A password to protect the gzip container used to neturalize the malicious file that was uploaded.
       The password will be required to extract the gzip container and analyze the malicious file.
       If you prefer not to password protect your gzip file, leave this field empty.
-    type: string
+    type: secret
     example: "Passw0rd!"
     default: ""
 #      validationRegex: ^(\/[^\s\/\,]+)+(\,(\/[^\s\/\,]+)+)*$

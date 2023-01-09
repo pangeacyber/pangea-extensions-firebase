@@ -115,6 +115,34 @@ params:
     required: true
     immutable: true
 
+  - param: PANGEA_DOMAIN
+    label: Pangea service base domain
+    description: >
+      The base domain of where your Pangea Service is deployed. The **Domain** value can be copied from the main dashboard of the [Pangea Console](https://console.pangea.cloud).
+    type: select
+    options:
+      - label: gcp.us.pangea.cloud
+        value: gcp.us.pangea.cloud
+      - label: gcp.eu.pangea.cloud
+        value: gcp.eu.pangea.cloud
+      - label: aws.us.pangea.cloud
+        value: aws.us.pangea.cloud
+      - label: aws.eu.pangea.cloud
+        value: aws.eu.pangea.cloud
+    default: gcp.us.pangea.cloud
+    required: true
+    immutable: true
+
+  - param: PANGEA_REDACT_TOKEN
+    label: Pangea Auth Token with access to the Redact service
+    description: >
+      The Pangea Token to use to authenticate access to the Pangea Redact service. The **Token** value can be copied from the [Redact Dashboard](https://console.pangea.cloud/service/redact) of the Pangea Console.
+    type: secret
+    example: pts_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    validationRegex: "^pts_[a-z2-7]{32}$"
+    validationErrorMessage: Must be a valid Pangea Auth Token
+    required: true
+
   - param: COLLECTION_PATH
     label: Collection path
     description: >
@@ -139,31 +167,4 @@ params:
       What is the name of the field where you want to store the redacted version the string?
     example: redacted
     default: redacted
-    required: true
-
-  - param: PANGEA_DOMAIN
-    label: Pangea service base domain
-    description: >
-      The base domain of where your Pangea Service is deployed. The **Domain** value can be copied from the main dashboard of the [Pangea Console](https://console.pangea.cloud).
-    type: select
-    options:
-      - label: gcp.us.pangea.cloud
-        value: gcp.us.pangea.cloud
-      - label: gcp.eu.pangea.cloud
-        value: gcp.eu.pangea.cloud
-      - label: aws.us.pangea.cloud
-        value: aws.us.pangea.cloud
-      - label: aws.eu.pangea.cloud
-        value: aws.eu.pangea.cloud
-    default: gcp.us.pangea.cloud
-    required: true
-    immutable: true
-
-  - param: PANGEA_REDACT_TOKEN
-    label: Pangea Auth Token with access to the Redact service
-    description: >
-      The Pangea Token to use to authenticate access to the Pangea Redact service. The **Token** value can be copied from the [Redact Dashboard](https://console.pangea.cloud/service/redact) of the Pangea Console.
-    example: pts_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-    validationRegex: "^pts_[a-z2-7]{32}$"
-    validationErrorMessage: Must be a valid Pangea Auth Token
     required: true

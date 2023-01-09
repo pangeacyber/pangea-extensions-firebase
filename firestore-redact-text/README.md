@@ -2,7 +2,7 @@
 
 **Author**: Pangea Cyber (**[https://pangea.cloud](https://pangea.cloud)**)
 
-**Description**: Redact sensitive or Personally Identifiable Information (PII) information such as names, phone, credit card or socail security numbers from strings written to a Cloud Firestore collection based on defined rulesets (uses the Pangea Redact API).
+**Description**: Redact sensitive or Personally Identifiable Information (PII) information such as names, phone, credit card or social security numbers from strings written to a Cloud Firestore collection based on defined rulesets (uses the Pangea Redact API).
 
 
 
@@ -36,7 +36,7 @@ admin.firestore().collection('redact').add({
 
 #### Additional setup
 
-Before installing this extension, make sure that you have signed up for a free [Pangea](https://pangea.cloud/signup) account and have [set up a Cloud Firestore database](https://firebase.google.com/docs/firestore/quickstart) in your Firebase project.
+Before installing this extension, make sure that you have signed up for a free [Pangea](https://pangea.cloud/signup?utm_medium=google-marketplace&utm_source=marketplace&utm_campaign=firebase-extension-redact) account and have [set up a Cloud Firestore database](https://firebase.google.com/docs/firestore/quickstart) in your Firebase project.
 
 #### Billing
 To install an extension, your project must be on the [Blaze (pay as you go) plan](https://firebase.google.com/pricing)
@@ -47,6 +47,8 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
   - Cloud Firestore
   - Cloud Functions (Node.js 10+ runtime. [See FAQs](https://firebase.google.com/support/faq#extensions-pricing))
 
+Usage of this extension also requires you to have a [Pangea](https://pangea.cloud/signup?utm_medium=google-marketplace&utm_source=marketplace&utm_campaign=firebase-extension-audit) account. You are responsible for any associated costs with your usage of Pangea.
+
 
 
 
@@ -54,19 +56,19 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
 
 * Cloud Functions location: Where do you want to deploy the functions created for this extension? You usually want a location close to your database. For help selecting a location, refer to the [location selection guide](https://firebase.google.com/docs/functions/locations).
 
+* Pangea service base domain: The base domain of where your Pangea Service is deployed. The **Domain** value can be copied from the main dashboard of the [Pangea Console](https://console.pangea.cloud).
+
+
+* Pangea Auth Token with access to the Redact service: The Pangea Token to use to authenticate access to the Pangea Redact service. The **Token** value can be copied from the [Redact Dashboard](https://console.pangea.cloud/service/redact) of the Pangea Console.
+
+
 * Collection path: What is the path to the collection that contains the strings that you want to redact?
 
 
 * Input field name: What is the name of the field that contains the string that you want to redact?
 
 
-* Redaction output field name: What is the name of the field where you want to store your redacted text?
-
-
-* Pangea service base domain: The base domain of where your Pangea Service is deployed. The **Domain** value can be copied from the main dashboard of the [Pangea Console](https://console.pangea.cloud).
-
-
-* Pangea Auth Token with access to the Redact service: The Pangea Token to use to authenticate access to the Pangea Redact service. The **Token** value can be copied from the [Redact Dashboard](https://console.pangea.cloud/service/redact) of the Pangea Console.
+* Redaction output field name: What is the name of the field where you want to store the redacted version the string?
 
 
 
