@@ -42,7 +42,7 @@ apis:
 
 roles:
   - role: storage.admin
-    reason: Allows the extension to store neaturalized files in Cloud Storage
+    reason: Allows the extension to store neutralized files in Cloud Storage
 
 resources:
   - name: checkFileReputation
