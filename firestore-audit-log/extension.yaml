@@ -13,7 +13,7 @@
 # limitations under the License.
 
 name: firestore-audit-log
-version: 0.0.1
+version: 0.0.5
 specVersion: v1beta
 
 displayName: Secure Audit Logging
@@ -39,6 +39,10 @@ billingRequired: true
 apis:
 #  - apiName: audit.aws.us.pangea.cloud/v1/log
 #    reason: To use Pangea Secure Audit Log Service to log security critial events.
+  - apiName: eventarc.googleapis.com
+    reason: Powers all events and triggers
+  - apiName: run.googleapis.com
+    reason: Powers v2 functions
 
 roles:
   - role: datastore.user

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 name: storage-file-intel
-version: 0.1.30
+version: 0.1.32
 specVersion: v1beta
 
 displayName: File Reputation Scanning
@@ -42,14 +42,14 @@ apis:
 
 roles:
   - role: storage.admin
-    reason: Allows the extension to store resized images in Cloud Storage
+    reason: Allows the extension to store neaturalized files in Cloud Storage
 
 resources:
   - name: checkFileReputation
     type: firebaseextensions.v1beta.function
     description: >-
       Listens for new files uploaded to your specified Cloud Storage bucket, checks the file's reputation againt a database of 25 millions known malicious files,
-      and isolates the file in gzip formatted container if it is deemed . Optionally keeps or deletes the original images.
+      and isolates the file in gzip formatted container if it is deemed . Optionally keeps or deletes the original file.
     properties:
       location: ${param:LOCATION}
       runtime: nodejs14
@@ -147,7 +147,7 @@ params:
     required: true
 
   - param: IMG_BUCKET
-    label: Cloud Storage bucket for images
+    label: Cloud Storage bucket to secure
     description: >
       To which Cloud Storage bucket will you upload files that you want to scan for malicious behavior?
       Files deemed malicious are copied into in a gzip formatted container and the original is then either
@@ -226,7 +226,7 @@ params:
     label: List of absolute paths not to scan for malious behavior
     description: >
       Ensure pangea-file-intel does *not* scan files in _specific locations_ in your Storage bucket by
-      supplying a comma-separated list of absolute paths. For example, to *exclude* the images
+      supplying a comma-separated list of absolute paths. For example, to *exclude* the files
       stored in the `/users/sandbox` and `/general/items` directories, specify the paths `/users/sandbox,/general/items`.
 
       You may also use wildcard notation for directories in the path. For example, `/users/*/pictures`
