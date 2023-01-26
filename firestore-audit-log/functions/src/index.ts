@@ -234,14 +234,27 @@ const updateResponse = async (
 export const onmaliciousfiledetected = functionsV2.eventarc.onCustomEventPublished(
   "firebase.extensions.pangea-file-intel.v1.complete",
   async (event) => {
-    //console.log(JSON.stringify(event))
-    return await logObject({
-      message: `Malicious file '${event.subject}' neaturalize to path '${event.data.output.outputFilePath}'.`,
-      actor: event.source,
-      action: "Neaturalized",
-      target: event.data.output.outputFilePath,
-      source: event.subject,
-      status: event.data.input.metadata.threatVerdict
-    });
-  }
-);
+    try {
+      return await logObject({
+        message: `Malicious file '${event.subject}' neaturalize to path '${event.data.output.outputFilePath}'.`,
+        actor: event.source,
+        action: "Neaturalized",
+        target: event.data.output.outputFilePath,
+        source: event.subject,
+        status: event.data.input.metadata.threatVerdict
+      });
+    } catch(err) {
+      return Promise.reject(err);
+    }
+  });
+
+  export const onlogevent = functionsV2.eventarc.onCustomEventPublished(
+    "firebase.extensions.pangea-audit-log.v1.log",
+    async (event) => {
+      try {
+        return await logObject(event.data);
+      } catch(err) {
+        return Promise.reject(err);
+      }
+    }
+  );

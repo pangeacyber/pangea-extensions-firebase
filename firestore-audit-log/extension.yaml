@@ -13,7 +13,7 @@
 # limitations under the License.
 
 name: firestore-audit-log
-version: 0.0.5
+version: 0.0.12
 specVersion: v1beta
 
 displayName: Secure Audit Logging
@@ -73,6 +73,19 @@ resources:
         timeoutSeconds: 60
       eventTrigger:
         eventType: firebase.extensions.pangea-file-intel.v1.complete
+        channel: projects/${param:PROJECT_ID}/locations/${param:LOCATION}/channels/firebase
+
+  - name: onlogevent
+    type: firebaseextensions.v1beta.v2function
+    properties:
+      location: ${param:LOCATION}
+      buildConfig:
+        runtime: nodejs14
+      serviceConfig:
+        availableMemory: 512M
+        timeoutSeconds: 60
+      eventTrigger:
+        eventType: firebase.extensions.pangea-audit-log.v1.log
         channel: projects/${param:PROJECT_ID}/locations/${param:LOCATION}/channels/firebase
 
 params:
