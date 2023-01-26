@@ -29,6 +29,10 @@ export const errorDeleting = (err: Error) => {
   logger.warn("Error when deleting files", err);
 };
 
+export const errorPangea = (summary: String, err: String) => {
+  logger.error("Error", summary, err);
+};
+
 export const failed = () => {
   logger.error("Failed execution of extension");
 };

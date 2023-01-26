@@ -156,9 +156,9 @@ export const checkFileReputation = functions.storage
         }
       } catch (e) {
         if (e instanceof PangeaErrors.APIError) {
-          console.log("Error", e.summary, e.errors);
+          logs.errorPangea(e.summary, e.errors)
         } else {
-          console.log("Error: ", e);
+          logs.error(e);
         }
       }
 
