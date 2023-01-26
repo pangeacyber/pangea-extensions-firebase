@@ -231,6 +231,52 @@ const updateResponse = async (
   logs.updateDocumentComplete(snapshot.ref.path);
 };
 
+export const onusercreated = functions.handler.auth.user.onCreate((
+  async (user): Promise<void> => {
+    try {
+      const displayName =
+        user.displayName?user.displayName:
+          user.email?user.email:
+            user.phoneNumber?user.phoneNumber:
+              user.uid;
+
+      return await logObject({
+        message: `User '${displayName}' created.`,
+        actor: user.uid,
+        target: displayName,
+        action: "User Created",
+        source: "audit-log-ext",
+        status: "Completed",
+      });
+    } catch(err) {
+      return Promise.reject(err);
+    }
+  })
+);
+
+export const onuserdeleted = functions.handler.auth.user.onDelete((
+  async (user): Promise<void> => {
+    try {
+      const displayName =
+        user.displayName?user.displayName:
+          user.email?user.email:
+            user.phoneNumber?user.phoneNumber:
+              user.uid;
+
+      return await logObject({
+        message: `User '${displayName}' deleted.`,
+        actor: user.uid,
+        target: displayName,
+        action: "User Deleted",
+        source: "audit-log-ext",
+        status: "Completed",
+      });
+    } catch(err) {
+      return Promise.reject(err);
+    }
+  })
+);
+
 export const onmaliciousfiledetected = functionsV2.eventarc.onCustomEventPublished(
   "firebase.extensions.pangea-file-intel.v1.complete",
   async (event) => {

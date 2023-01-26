@@ -36,6 +36,10 @@ contributors:
 
 billingRequired: true
 
+externalServices:
+  - name: Pangea
+    PricingUri: https://pangea.cloud/pricing
+
 apis:
 #  - apiName: https://redact.aws.us.pangea.cloud/v1/redact
 #    reason: To use Pangea Redact Service to remove sensitive information from strings.

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 name: firestore-audit-log
-version: 0.0.12
+version: 0.0.14
 specVersion: v1beta
 
 displayName: Secure Audit Logging
@@ -36,9 +36,11 @@ contributors:
 
 billingRequired: true
 
+externalServices:
+  - name: Pangea
+    PricingUri: https://pangea.cloud/pricing
+
 apis:
-#  - apiName: audit.aws.us.pangea.cloud/v1/log
-#    reason: To use Pangea Secure Audit Log Service to log security critial events.
   - apiName: eventarc.googleapis.com
     reason: Powers all events and triggers
   - apiName: run.googleapis.com
@@ -62,8 +64,34 @@ resources:
         eventType: providers/cloud.firestore/eventTypes/document.write
         resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${param:COLLECTION_PATH}/{messageId}
 
+# Firebase Auth events
+  - name: onusercreated
+    type: firebaseextensions.v1beta.function
+    description:
+      Detects and automatically records a Secure Audit Log entry when a new user is created.
+    properties:
+      location: ${LOCATION}
+      runtime: nodejs14
+      eventTrigger:
+        eventType: providers/firebase.auth/eventTypes/user.create
+        resource: projects/${PROJECT_ID}
+
+  - name: onuserdeleted
+    type: firebaseextensions.v1beta.function
+    description:
+      Detects and automatically records a Secure Audit Log entry when a user is deleted.
+    properties:
+      location: ${LOCATION}
+      runtime: nodejs14
+      eventTrigger:
+        eventType: providers/firebase.auth/eventTypes/user.delete
+        resource: projects/${PROJECT_ID}
+
+# Other Pangea Extensions events
   - name: onmaliciousfiledetected
     type: firebaseextensions.v1beta.v2function
+    description:
+      Listens for events emitted from the Pangea File Reputation Scanning Extension and automatically records when a malicious file is uploaded to Cloud Storage.
     properties:
       location: ${param:LOCATION}
       buildConfig:
@@ -75,8 +103,11 @@ resources:
         eventType: firebase.extensions.pangea-file-intel.v1.complete
         channel: projects/${param:PROJECT_ID}/locations/${param:LOCATION}/channels/firebase
 
+# User or third-party Extensions provided log events
   - name: onlogevent
     type: firebaseextensions.v1beta.v2function
+    description:
+      Listens for events emitted from your application or other extensions, you granted permission to emit this event, and writes the provided data to the Pangea Secure Audit Log.
     properties:
       location: ${param:LOCATION}
       buildConfig:
