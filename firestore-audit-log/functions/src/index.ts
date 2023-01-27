@@ -234,11 +234,10 @@ const updateResponse = async (
 export const onusercreated = functions.handler.auth.user.onCreate((
   async (user): Promise<void> => {
     try {
-      const displayName =
-        user.displayName?user.displayName:
-          user.email?user.email:
-            user.phoneNumber?user.phoneNumber:
-              user.uid;
+      const displayName = user.displayName ||
+        user.email ||
+        user.phoneNumber ||
+        user.uid;
 
       return await logObject({
         message: `User '${displayName}' created.`,
@@ -257,11 +256,10 @@ export const onusercreated = functions.handler.auth.user.onCreate((
 export const onuserdeleted = functions.handler.auth.user.onDelete((
   async (user): Promise<void> => {
     try {
-      const displayName =
-        user.displayName?user.displayName:
-          user.email?user.email:
-            user.phoneNumber?user.phoneNumber:
-              user.uid;
+      const displayName = user.displayName ||
+        user.email ||
+        user.phoneNumber ||
+        user.uid;
 
       return await logObject({
         message: `User '${displayName}' deleted.`,
