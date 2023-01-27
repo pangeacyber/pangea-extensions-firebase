@@ -216,7 +216,7 @@ const updateResponse = async (
   logs.updateDocument(docPath);
 
   const docRef = await admin.firestore().doc(docPath);
-  
+
   // Wrapping in transaction to allow for automatic retries (#48)
   await admin.firestore().runTransaction((transaction) => {
     transaction.update(docRef, config.outputFieldName, responses);
@@ -228,11 +228,10 @@ const updateResponse = async (
 
 export const onusercreated = async (user): Promise<void> => {
   try {
-    const displayName =
-      user.displayName ? user.displayName :
-        user.email ? user.email :
-          user.phoneNumber ? user.phoneNumber :
-            user.uid;
+    const displayName = user.displayName ||
+      user.email ||
+      user.phoneNumber ||
+      user.uid;
 
     return await logObject({
       message: `User '${displayName}' created.`,
@@ -249,11 +248,10 @@ export const onusercreated = async (user): Promise<void> => {
 
 export const onuserdeleted = async (user): Promise<void> => {
   try {
-    const displayName =
-      user.displayName ? user.displayName :
-        user.email ? user.email :
-          user.phoneNumber ? user.phoneNumber :
-            user.uid;
+    const displayName = user.displayName ||
+      user.email ||
+      user.phoneNumber ||
+      user.uid;
 
     return await logObject({
       message: `User '${displayName}' deleted.`,
