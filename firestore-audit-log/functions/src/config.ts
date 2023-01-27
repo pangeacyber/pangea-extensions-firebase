@@ -16,6 +16,7 @@
 
 export default {
   location: process.env.LOCATION,
+  collectionPath: process.env.COLLECTION_PATH,
   inputFieldName: process.env.INPUT_FIELD_NAME,
   outputFieldName: process.env.OUTPUT_FIELD_NAME,
   pangeaDomain: process.env.PANGEA_DOMAIN,

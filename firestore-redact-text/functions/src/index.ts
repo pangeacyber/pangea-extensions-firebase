@@ -16,7 +16,7 @@
 
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
-import {PangeaConfig, RedactService} from "pangea-node-sdk"
+import { PangeaConfig, RedactService } from "pangea-node-sdk"
 
 import config from "./config";
 import * as logs from "./logs";
@@ -39,61 +39,56 @@ admin.initializeApp();
 
 logs.init(config);
 
-export const fsredact = functions.handler.firestore.document.onWrite(
-  async (change): Promise<void> => {
-    logs.start(config);
-    const { inputFieldName, outputFieldName } = config;
+export const fsredact = async (change): Promise<void> => {
+  logs.start(config);
+  const { inputFieldName, outputFieldName } = config;
 
-    if (validators.fieldNamesMatch(inputFieldName, outputFieldName)) {
-      logs.fieldNamesNotDifferent();
-      return;
-    }
-
-    const changeType = getChangeType(change);
-
-    try {
-      switch (changeType) {
-        case ChangeType.CREATE:
-          await handleCreateDocument(change.after);
-          break;
-        case ChangeType.DELETE:
-          handleDeleteDocument();
-          break;
-        case ChangeType.UPDATE:
-          await handleUpdateDocument(change.before, change.after);
-          break;
-      }
-
-      logs.complete();
-    } catch (err) {
-      logs.error(err);
-    }
+  if (validators.fieldNamesMatch(inputFieldName, outputFieldName)) {
+    logs.fieldNamesNotDifferent();
+    return;
   }
-);
 
-const extractInput = (snapshot: admin.firestore.DocumentSnapshot): any => {
-  return snapshot.get(config.inputFieldName);
+  const changeType = getChangeType(change);
+
+  try {
+    switch (changeType) {
+      case ChangeType.CREATE:
+        await handleCreateDocument(change.value);
+        break;
+      case ChangeType.DELETE:
+        handleDeleteDocument();
+        break;
+      case ChangeType.UPDATE:
+        await handleUpdateDocument(change.oldValue, change.value);
+        break;
+    }
+
+    logs.complete();
+  } catch (err) {
+    logs.error(err);
+  }
+};
+
+const extractInput = (data): any => {
+  return data?.fields?.[config.inputFieldName]?.stringValue || data?.fields?.[config.inputFieldName]?.arrayValue;
 };
 
 const getChangeType = (
-  change: functions.Change<admin.firestore.DocumentSnapshot>
+  event
 ): ChangeType => {
-  if (!change.after.exists) {
+  if (!("value" in event) && 'oldValue' in event) {
     return ChangeType.DELETE;
-  }
-  if (!change.before.exists) {
+  } else if (!("oldValue" in event) && 'value' in event) {
     return ChangeType.CREATE;
   }
   return ChangeType.UPDATE;
 };
 
-const handleCreateDocument = async (
-  snapshot: admin.firestore.DocumentSnapshot
-): Promise<void> => {
-  const input = extractInput(snapshot);
+const handleCreateDocument = async (value): Promise<void> => {
+  const input = extractInput(value);
   if (input) {
     logs.documentCreatedWithInput();
-    await redactDocument(snapshot);
+    await redactDocument(value);
   } else {
     logs.documentCreatedNoInput();
   }
@@ -103,10 +98,7 @@ const handleDeleteDocument = (): void => {
   logs.documentDeleted();
 };
 
-const handleUpdateDocument = async (
-  before: admin.firestore.DocumentSnapshot,
-  after: admin.firestore.DocumentSnapshot
-): Promise<void> => {
+const handleUpdateDocument = async (before, after): Promise<void> => {
   const inputBefore = extractInput(before);
   const inputAfter = extractInput(after);
 
@@ -133,14 +125,13 @@ const handleUpdateDocument = async (
 
 const redactSingle = async (
   input: string,
-  snapshot: admin.firestore.DocumentSnapshot
+  docPath
 ): Promise<void> => {
   logs.redactSingleString(input);
 
   try {
-
     const redaction = await redactString(input);
-    return updateRedaction(snapshot, redaction);
+    return updateRedaction(docPath, redaction);
 
   } catch (err) {
     logs.redactSingleStringError(input, err);
@@ -150,7 +141,7 @@ const redactSingle = async (
 
 const redactMultiple = async (
   input: object,
-  snapshot: admin.firestore.DocumentSnapshot
+  docPath
 ): Promise<void> => {
   let translations = {};
   let promises = [];
@@ -158,20 +149,20 @@ const redactMultiple = async (
   logs.redactMultipleStrings(input);
 
   Object.entries(input).forEach(([input, value]) => {
-      promises.push(
-        () =>
-          new Promise<void>(async (resolve) => {
+    promises.push(
+      () =>
+        new Promise<void>(async (resolve) => {
 
-            const output =
-              typeof value === "string"
-                ? await redactString(value)
-                : null;
+          const output =
+            typeof value === "string"
+              ? await redactString(value)
+              : null;
 
-            translations[input] = output;
+          translations[input] = output;
 
-            return resolve();
-          })
-      );
+          return resolve();
+        })
+    );
   });
 
   for (const fn of promises) {
@@ -180,19 +171,17 @@ const redactMultiple = async (
 
   logs.redactMultipleStringsComplete(input);
 
-  return updateRedaction(snapshot, translations);
+  return updateRedaction(docPath, translations);
 };
 
-const redactDocument = async (
-  snapshot: admin.firestore.DocumentSnapshot
-): Promise<void> => {
-  const input: any = extractInput(snapshot);
+const redactDocument = async (value): Promise<void> => {
+  const input: any = extractInput(value);
 
   if (typeof input === "object") {
-    return redactMultiple(input, snapshot);
+    return redactMultiple(input, value.name);
   }
 
-  await redactSingle(input, snapshot);
+  await redactSingle(input, value.name);
 };
 
 const redactString = async (
@@ -202,7 +191,7 @@ const redactString = async (
     logs.redactInputString(string);
 
     const response = await redact.redact(string);
-    if(response.success) {
+    if (response.success) {
       var redactedString = response.result.redacted_text
     }
 
@@ -215,17 +204,19 @@ const redactString = async (
   }
 };
 
-const updateRedaction = async (
-  snapshot: admin.firestore.DocumentSnapshot,
-  translations: any
-): Promise<void> => {
-  logs.updateDocument(snapshot.ref.path);
+const updateRedaction = async (fullPath, translations: any): Promise<void> => {
+  const docId = fullPath.split("/").pop();
+  const docPath = `${config.collectionPath}/${docId}`;
+
+  logs.updateDocument(docPath);
+
+  const docRef = await admin.firestore().doc(docPath);
 
   // Wrapping in transaction to allow for automatic retries (#48)
   await admin.firestore().runTransaction((transaction) => {
-    transaction.update(snapshot.ref, config.outputFieldName, translations);
+    transaction.update(docRef, config.outputFieldName, translations);
     return Promise.resolve();
   });
 
-  logs.updateDocumentComplete(snapshot.ref.path);
+  logs.updateDocumentComplete(docPath);
 };

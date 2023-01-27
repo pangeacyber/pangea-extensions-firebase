@@ -22,11 +22,11 @@ import * as path from "path";
 import * as fs from "fs";
 import * as Archiver from 'archiver';
 import * as ArchiverEncrypted from 'archiver-zip-encrypted';
-if(config.zipPassword !== undefined)
+if (config.zipPassword !== undefined)
   Archiver.registerFormat('zip-encrypted', ArchiverEncrypted);
 
 import { Bucket } from "@google-cloud/storage";
-import { ObjectMetadata } from "firebase-functions/lib/providers/storage";
+import { storage } from "firebase-functions";
 import { uuid } from "uuidv4";
 
 export interface IsolateFileResult {
@@ -43,7 +43,7 @@ export const isolateFile = async ({
   bucket: Bucket;
   originalFile: string;
   parsedPath: path.ParsedPath;
-  objectMetadata: ObjectMetadata;
+  objectMetadata: storage.ObjectMetadata;
 }): Promise<IsolateFileResult> => {
   const {
     ext: fileExtension,
@@ -71,9 +71,9 @@ export const isolateFile = async ({
     const contentDisposition =
       objectMetadata && objectMetadata.contentDisposition
         ? objectMetadata.contentDisposition.replace(
-            /(filename\*=utf-8''[^;\s]+)/,
-            `filename*=utf-8''${modifiedFileName}`
-          )
+          /(filename\*=utf-8''[^;\s]+)/,
+          `filename*=utf-8''${modifiedFileName}`
+        )
         : "";
 
     // Cloud Storage files.
@@ -92,7 +92,7 @@ export const isolateFile = async ({
       metadata.metadata.firebaseStorageDownloadTokens = uuid();
     }
 
-    const createZip = new Promise((resolve, reject) => {
+    const createZip = new Promise<void>((resolve, reject) => {
       // create a file to stream archive data to.
       const output = fs.createWriteStream(modifiedFile);
 
@@ -111,7 +111,7 @@ export const isolateFile = async ({
       }
 
       // listen for all archive data to be written
-      output.on('close', function() {
+      output.on('close', function () {
         console.log(archive.pointer() + ' total bytes');
         console.log('archiver has been finalized and the output file descriptor has closed.');
         resolve();
@@ -120,7 +120,7 @@ export const isolateFile = async ({
       // pipe archive data to the file
       archive.pipe(output);
       // append a file
-      archive.file(originalFile, { name: fileNameWithoutExtension +  fileExtension});
+      archive.file(originalFile, { name: fileNameWithoutExtension + fileExtension });
       // finalize the archive ('close', 'end' or 'finish' may be fired right after calling this method)
       archive.finalize();
     });
