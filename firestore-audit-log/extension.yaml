@@ -13,7 +13,7 @@
 # limitations under the License.
 
 name: firestore-audit-log
-version: 0.0.14
+version: 0.0.15
 specVersion: v1beta
 
 displayName: Secure Audit Logging
@@ -32,7 +32,7 @@ author:
 contributors:
   - authorName: Nicolas Vautier
     email: nvautier@digitaljoyride.com
-    url: https://github.com/pangea-nv
+    url: https://github.com/developerEnvY
 
 billingRequired: true
 
@@ -198,11 +198,11 @@ params:
   - param: PANGEA_AUDIT_TOKEN
     label: Pangea Auth Token with access to the Secure Audit Log service
     description: >
-      The Pangea Token to use to authenticate access to the Pangea Redact service. The **Token** value can be copied from the [Secure Audit Log Dashboard](https://console.pangea.cloud/service/audit) of the Pangea Console.
+      The Pangea Token to use to authenticate access to the Pangea Secure Audit Log service. The **Token** value can be copied from the [Secure Audit Log Dashboard](https://console.pangea.cloud/service/audit) of the Pangea Console.
     type: secret
     example: pts_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-    #validationRegex: "^[^/]+(/[^/]+/[^/]+)*$"
-    #validationErrorMessage: Must be a valid Pangea Auth Token
+    validationRegex: "^pts_[a-z2-7]{32}$"
+    validationErrorMessage: Must be a valid Pangea Auth Token
     required: true
 
   - param: COLLECTION_PATH
