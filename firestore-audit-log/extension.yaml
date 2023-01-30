@@ -201,8 +201,8 @@ params:
       The Pangea Token to use to authenticate access to the Pangea Secure Audit Log service. The **Token** value can be copied from the [Secure Audit Log Dashboard](https://console.pangea.cloud/service/audit) of the Pangea Console.
     type: secret
     example: pts_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-    #validationRegex: "^[^/]+(/[^/]+/[^/]+)*$"
-    #validationErrorMessage: Must be a valid Pangea Auth Token
+    validationRegex: "^pts_[a-z2-7]{32}$"
+    validationErrorMessage: Must be a valid Pangea Auth Token
     required: true
 
   - param: COLLECTION_PATH
