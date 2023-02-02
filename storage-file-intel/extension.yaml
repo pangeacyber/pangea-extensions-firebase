@@ -13,12 +13,12 @@
 # limitations under the License.
 
 name: storage-file-intel
-version: 0.1.37
+version: 0.1.38
 specVersion: v1beta
 
-displayName: File Reputation Scanning
+displayName: Known Malware Detection
 description:
-  Scans files uploaded to Cloud Storage for known malicious behavior, isolates the file in a gzip formatted container if deemed malicious, and optionally keeps or deletes the original file.
+  Checks files uploaded to Cloud Storage for known malicious behavior, isolates the file in a gzip formatted container if deemed malicious, and optionally keeps or deletes the original file.
 
 license: Apache-2.0
 

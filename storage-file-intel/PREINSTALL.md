@@ -1,12 +1,12 @@
-Use this extension to automatically scans files uploaded to a Cloud Storage bucket for malicious behavior. It will compare the hash of the file to against a list of 25 million known malicious files.
+Use this extension to automatically check files uploaded to a Cloud Storage bucket for malicious behavior. It will compare the hash of the file to against a list of 25 million known malicious files.
 
-When you upload a file to your specified Cloud Storage bucket, this extension:
+When a user uploads a file to your specified Cloud Storage bucket, this extension:
 
 - Detects if the file is a known malicious file. If it is, then:
   - Neutralizes the file by copying the file to a gzip formatted container.
   - Optionally, deletes the original file.
 
-The extension can publish a file scanned completion event which you can optionally enable when you install the extension. If you enable events, you can [write custom event handlers](https://firebase.google.com/docs/extensions/install-extensions#eventarc) that respond to these events. You can always enable or disable events later. Events will be emitted via Eventarc.
+The extension can publish a completion event when a file is neutralized, which can be optionally enabled when you install it. If you enable events, you can [write custom event handlers](https://firebase.google.com/docs/extensions/install-extensions#eventarc) that respond to these events. You can always enable or disable events later. Events will be emitted via Eventarc.
 
 #### Detailed configuration information
 
