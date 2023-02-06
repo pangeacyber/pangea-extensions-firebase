@@ -6,7 +6,7 @@
 
 
 
-**Details**: Use this extension to securely log sensitive events using Pangea tamperproof Secure Audit Log service by writing log messages to a Cloud Firestore collection.
+**Details**: Use this extension to securely log sensitive events using Pangea tamperproof Secure Audit Log service by writing log messages to a Cloud Firestore collection or by emitting an EventArc event.
 
 This extension listens to your specified Cloud Firestore collection. If you add a string or event object map to a specified field in any document within that collection, this extension:
 
@@ -17,20 +17,20 @@ You can specify the desired metadata types in addition to the message for each l
 
 If the original input field of the document is updated, a new log entry will be automatically created.
 
-#### Logging messages
+#### Logging messages (Firestore)
 
 Each log is comprised of a set of fields designed to record specific components of the activity being recorded. The only required field is message, with all others being optional.
 
 ```js
-admin.firestore().collection('audit').add("Record created");
+getFirestore().collection('audit').add("Record created");
 ```
 
-#### Logging messages with optional metadata
+#### Logging messages with optional metadata (Firestore)
 
 To create an entry with optional metadata fields, store a map containing the optional fields as keys and values as strings.
 
 ```js
-admin.firestore().collection('audit').add({
+getFirestore().collection('audit').add({
   message: "Record created with metadata",
   actor:  "User 1",
   action: "Create",
@@ -40,12 +40,12 @@ admin.firestore().collection('audit').add({
 })
 ```
 
-#### Multiple log entries
+#### Multiple log entries (Firestore)
 
 To log multiple entries, store an array of either maps or strings:
 
 ```js
-admin.firestore().collection('audit').add([
+getFirestore().collection('audit').add([
   {
     message: "First record created",
     actor:  "User 1",
@@ -71,6 +71,22 @@ admin.firestore().collection('audit').add([
     status: "Completed",
   }
 ])
+```
+
+#### Logging messages (EventArc)
+
+```js
+getEventarc().channel().publish({
+  type: "firebase.extensions.pangea-audit-log.v1.log",
+  data: {
+    message: "Record created with metadata",
+    actor:  "User 1",
+    action: "Create",
+    source: "Firebase client",
+    target: "Database",
+    status: "Completed",
+  }},
+});
 ```
 
 #### Additional setup
@@ -116,11 +132,25 @@ Usage of this extension also requires you to have a [Pangea](https://pangea.clou
 
 * **fslog:** Listens for writes of new strings to your specified Cloud Firestore collection, records them using the Secure Audit Log service, a hash of each log entry will be recorded on a immutable and tamperproof blockchian which can later be cryptographically verified for authenticity
 
+* **onusercreated:** Detects and automatically records a Secure Audit Log entry when a new user is created.
+
+* **onuserdeleted:** Detects and automatically records a Secure Audit Log entry when a user is deleted.
+
 
 
 **Other Resources**:
 
 * onmaliciousfiledetected (firebaseextensions.v1beta.v2function)
+
+* onlogevent (firebaseextensions.v1beta.v2function)
+
+
+
+**APIs Used**:
+
+* eventarc.googleapis.com (Reason: Powers all events and triggers)
+
+* run.googleapis.com (Reason: Powers v2 functions)
 
 
 
