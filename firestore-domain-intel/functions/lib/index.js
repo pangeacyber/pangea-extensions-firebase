@@ -80,7 +80,6 @@ const onusercreated = async (user) => {
             // Store the result
             if (result) {
                 const docCreated = await (0, utils_1.createDocument)(config_1.default.collectionPath, user.uid, { domain_intel: result });
-                console.log("Document: ", docCreated);
             }
         }
     }
@@ -95,7 +94,6 @@ exports.onusercreated = onusercreated;
 const onuserdeleted = async (user) => {
     try {
         const fieldRemoved = await (0, utils_1.deleteDocumentField)(config_1.default.collectionPath, user.uid, "domain_intel");
-        console.log("Field Removal: ", fieldRemoved);
     }
     catch (err) {
         functions.logger.error(strings_1.default.genericError, err);
