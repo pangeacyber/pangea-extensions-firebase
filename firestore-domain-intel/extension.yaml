@@ -220,6 +220,6 @@ params:
         value: YES
       - label: No
         value: NO
-    default: domaintools
+    default: YES
     required: true
     immutable: true
