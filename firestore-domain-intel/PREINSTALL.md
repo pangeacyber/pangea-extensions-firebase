@@ -1,11 +1,11 @@
-Use this extension to scan domain names using Pangea Domain Intel service by writing domain names to a Cloud Firestore collection.
+Use this extension to lookup and detect suspicious domain names using the Pangea Domain Intel service by writing domain names to a Cloud Firestore collection.
 
 This extension:
 
-- Listens to your specified Cloud Firestore collection. If you add a string to a specified field in any document within that collection, this extension scans the new value of the field using [Pangea Domain Intel Service](https://pangea.cloud/services/domain-intel/).  
-- Listens to Firebase Authentication user creation events and scans the new user's email domain using Pangea's Domain Intel service and stores the results in the Firestore collection which was specified during extension setup.
+- Listens to your specified Cloud Firestore collection. If you add a string to a specified field in any document within that collection, this extension queries the value of the field using [Pangea Domain Intel Service](https://pangea.cloud/services/domain-intel/).  
+- Optionally, listens to Firebase Authentication user creation events and looks up the new user's email domain using Pangea's Domain Intel service and stores the results in the Firestore collection which was specified during extension setup.
 
-If the original input field of the document is updated, the new value will be scanned using Pangea Domain Intel service also.
+If the original input field of the document is updated, the new value will be also be queried using Pangea Domain Intel service and the document will be updated with the response.
 
 #### Additional setup
 
@@ -21,4 +21,3 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
   - Cloud Functions (Node.js 10+ runtime. [See FAQs](https://firebase.google.com/support/faq#extensions-pricing))
 
 Usage of this extension also requires you to have a [Pangea](https://pangea.cloud/signup?utm_medium=google-marketplace&utm_source=marketplace&utm_campaign=firestore-domain-intel) account. You are responsible for any associated costs with your usage of Pangea.
-
