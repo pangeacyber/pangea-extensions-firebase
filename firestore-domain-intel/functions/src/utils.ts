@@ -88,5 +88,9 @@ export const createDocument = async (collectionPath, docId, payload: any) => {
 }
 
 export const deleteDocumentField = async (collectionPath, docId, field) => {
-    return firestore().collection(collectionPath).doc(docId).update({ [field]: FieldValue.delete() });
+    const doc = await firestore().collection(collectionPath).doc(docId).get();
+    if (doc.exists) {
+        return firestore().collection(collectionPath).doc(docId).update({ [field]: FieldValue.delete() });
+    }
+    return Promise.resolve();
 }

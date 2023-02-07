@@ -188,10 +188,10 @@ params:
     label: Collection path
     description: >
       What is the path to the collection that contains the domain url to be scanned?
-    example: lookup
+    example: pangea_lookup
     validationRegex: "^[^/]+(/[^/]+/[^/]+)*$"
     validationErrorMessage: Must be a valid Cloud Firestore Collection
-    default: lookup
+    default: pangea_lookup
     required: true
 
   - param: INPUT_FIELD_NAME
@@ -209,3 +209,17 @@ params:
     example: response
     default: response
     required: true
+
+  - param: AUTO_USER_LOOKUP
+    label: Automatic User Look up
+    description: >
+      Should the extension automatically scan the new user's email domain?
+    type: select
+    options:
+      - label: Yes
+        value: YES
+      - label: No
+        value: NO
+    default: domaintools
+    required: true
+    immutable: true

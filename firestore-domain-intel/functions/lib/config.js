@@ -22,5 +22,6 @@ exports.default = {
     outputFieldName: process.env.OUTPUT_FIELD_NAME,
     pangeaDomain: process.env.PANGEA_DOMAIN,
     pangeaDomainIntelToken: process.env.PANGEA_DOMAIN_INTEL_TOKEN,
-    pangeaDomainIntelProvider: process.env.DOMAIN_INTEL_PROVIDER
+    pangeaDomainIntelProvider: process.env.DOMAIN_INTEL_PROVIDER,
+    autoUserLookup: process.env.AUTO_USER_LOOKUP
 };

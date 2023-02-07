@@ -89,25 +89,26 @@ export const pangea_firestore_domain_intel = functions.firestore.document(config
 );
 
 export const onusercreated = async (user: UserRecord): Promise<void> => {
-  functions.logger.log(strings.onUserCreatedHandlerStart, user.uid);
-  try {
-    if (user.email) {
-      const emailDomain = user.email.split("@").pop();
-      const result = await callService(emailDomain);
-      // Store the result
-      if (result) {
-        const docCreated = await createDocument(config.collectionPath, user.uid, { domain_intel: result });
+  if (config.autoUserLookup === "YES") {
+    functions.logger.log(strings.onUserCreatedHandlerStart, user.uid);
+    try {
+      if (user.email) {
+        const emailDomain = user.email.split("@").pop();
+        const result = await callService(emailDomain);
+        // Store the result
+        if (result) {
+          const docCreated = await createDocument(config.collectionPath, user.uid, { domain_intel: result });
+        }
       }
+    } catch (err) {
+      functions.logger.error(strings.genericError, err);
+    } finally {
+      functions.logger.log(strings.onUserCreatedHandlerComplete, user.uid);
     }
-  } catch (err) {
-    functions.logger.error(strings.genericError, err);
-  } finally {
-    functions.logger.log(strings.onUserCreatedHandlerComplete, user.uid);
   }
 };
 
 export const onuserdeleted = async (user: UserRecord): Promise<void> => {
-
   try {
     const fieldRemoved = await deleteDocumentField(config.collectionPath, user.uid, "domain_intel");
   } catch (err) {

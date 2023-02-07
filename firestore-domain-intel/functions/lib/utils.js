@@ -73,6 +73,10 @@ const createDocument = async (collectionPath, docId, payload) => {
 };
 exports.createDocument = createDocument;
 const deleteDocumentField = async (collectionPath, docId, field) => {
-    return (0, firebase_admin_1.firestore)().collection(collectionPath).doc(docId).update({ [field]: firestore_1.FieldValue.delete() });
+    const doc = await (0, firebase_admin_1.firestore)().collection(collectionPath).doc(docId).get();
+    if (doc.exists) {
+        return (0, firebase_admin_1.firestore)().collection(collectionPath).doc(docId).update({ [field]: firestore_1.FieldValue.delete() });
+    }
+    return Promise.resolve();
 };
 exports.deleteDocumentField = deleteDocumentField;

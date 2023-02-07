@@ -72,22 +72,24 @@ exports.pangea_firestore_domain_intel = functions.firestore.document(config_1.de
     }
 });
 const onusercreated = async (user) => {
-    functions.logger.log(strings_1.default.onUserCreatedHandlerStart, user.uid);
-    try {
-        if (user.email) {
-            const emailDomain = user.email.split("@").pop();
-            const result = await callService(emailDomain);
-            // Store the result
-            if (result) {
-                const docCreated = await (0, utils_1.createDocument)(config_1.default.collectionPath, user.uid, { domain_intel: result });
+    if (config_1.default.autoUserLookup === "YES") {
+        functions.logger.log(strings_1.default.onUserCreatedHandlerStart, user.uid);
+        try {
+            if (user.email) {
+                const emailDomain = user.email.split("@").pop();
+                const result = await callService(emailDomain);
+                // Store the result
+                if (result) {
+                    const docCreated = await (0, utils_1.createDocument)(config_1.default.collectionPath, user.uid, { domain_intel: result });
+                }
             }
         }
-    }
-    catch (err) {
-        functions.logger.error(strings_1.default.genericError, err);
-    }
-    finally {
-        functions.logger.log(strings_1.default.onUserCreatedHandlerComplete, user.uid);
+        catch (err) {
+            functions.logger.error(strings_1.default.genericError, err);
+        }
+        finally {
+            functions.logger.log(strings_1.default.onUserCreatedHandlerComplete, user.uid);
+        }
     }
 };
 exports.onusercreated = onusercreated;
