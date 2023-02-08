@@ -39,7 +39,7 @@ admin.initializeApp();
 
 logs.init(config);
 
-export const fsredact = functions.handler.firestore.document.onWrite(
+export const fsredact = functions.firestore.document(config.collectionPath).onWrite(
   async (change): Promise<void> => {
     logs.start(config);
     const { inputFieldName, outputFieldName } = config;

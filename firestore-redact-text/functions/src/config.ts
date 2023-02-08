@@ -19,5 +19,6 @@ export default {
   inputFieldName: process.env.INPUT_FIELD_NAME,
   outputFieldName: process.env.OUTPUT_FIELD_NAME,
   pangeaDomain: process.env.PANGEA_DOMAIN,
-  redactToken: process.env.PANGEA_REDACT_TOKEN
+  redactToken: process.env.PANGEA_REDACT_TOKEN,
+  collectionPath: process.env.COLLECTION_PATH,
 };
