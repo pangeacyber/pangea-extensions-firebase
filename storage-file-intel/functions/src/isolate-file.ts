@@ -26,7 +26,7 @@ if(config.zipPassword !== undefined)
   Archiver.registerFormat('zip-encrypted', ArchiverEncrypted);
 
 import { Bucket } from "@google-cloud/storage";
-import { ObjectMetadata } from "firebase-functions/lib/providers/storage";
+import { storage } from "firebase-functions";
 import { uuid } from "uuidv4";
 
 export interface IsolateFileResult {
@@ -43,7 +43,7 @@ export const isolateFile = async ({
   bucket: Bucket;
   originalFile: string;
   parsedPath: path.ParsedPath;
-  objectMetadata: ObjectMetadata;
+  objectMetadata: storage.ObjectMetadata;
 }): Promise<IsolateFileResult> => {
   const {
     ext: fileExtension,
@@ -92,7 +92,7 @@ export const isolateFile = async ({
       metadata.metadata.firebaseStorageDownloadTokens = uuid();
     }
 
-    const createZip = new Promise((resolve, reject) => {
+    const createZip = new Promise<void>((resolve, reject) => {
       // create a file to stream archive data to.
       const output = fs.createWriteStream(modifiedFile);
 
