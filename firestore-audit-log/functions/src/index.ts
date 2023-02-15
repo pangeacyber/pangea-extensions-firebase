@@ -144,7 +144,7 @@ const logSingle = async (
         : typeof input === "string"
           ? await logObject({ message: input })
           : null;
-
+          
     return updateResponse(snapshot, response);
   } catch (err) {
     logs.auditSingleStringError(input, err);
@@ -212,7 +212,7 @@ const logObject = async (
     return response.result;
   } catch (err) {
     logs.auditStringError(JSON.stringify(input), err);
-    return err;
+    return Promise.reject(err);
   }
 };
 
