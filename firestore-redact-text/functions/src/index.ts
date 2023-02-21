@@ -16,11 +16,14 @@
 
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
-import {PangeaConfig, RedactService} from "pangea-node-sdk"
+import { PangeaConfig, RedactService } from "pangea-node-sdk"
+import { asyncPool } from "./utils";
 
 import config from "./config";
 import * as logs from "./logs";
 import * as validators from "./validators";
+
+const POOL_SIZE = 3;
 
 enum ChangeType {
   CREATE,
@@ -70,6 +73,38 @@ export const fsredact = functions.firestore.document(config.collectionPath).onWr
     }
   }
 );
+
+export const pangea_redact_bq_onc = functions.https.onCall(async (payload, context) => {
+  try {
+    const data = await redactBigQueryPayload(payload);
+    return { data };
+  } catch (err) {
+    return Promise.reject(err);
+  }
+});
+
+export const pangea_redact_bq_onr = functions.https.onRequest(async (req, res) => {
+  try {
+    const data = await redactBigQueryPayload(req.body?.data);
+    res.send({ data });
+  } catch (err) {
+    res.send({ status: 'error', code: 500, message: err.message });
+  }
+});
+
+const redactBigQueryPayload = async (payload) => {
+  if (!payload) {
+    return payload;
+  }
+
+  // Get the values from the payload
+  const values = payload?.map(item => item?.json?.data ?? "");
+
+  // Make POOL_SIZE calls at a time
+  const redactResults = await asyncPool(POOL_SIZE, values, (value,) => redact.redact(value));
+  // Results will replace the original values for data>json>data
+  return payload?.map((item, index) => ({ ...item, json: { ...item.json, data: redactResults[index]?.result?.redacted_text } }));
+};
 
 const extractInput = (snapshot: admin.firestore.DocumentSnapshot): any => {
   return snapshot.get(config.inputFieldName);
@@ -158,20 +193,20 @@ const redactMultiple = async (
   logs.redactMultipleStrings(input);
 
   Object.entries(input).forEach(([input, value]) => {
-      promises.push(
-        () =>
-          new Promise<void>(async (resolve) => {
+    promises.push(
+      () =>
+        new Promise<void>(async (resolve) => {
 
-            const output =
-              typeof value === "string"
-                ? await redactString(value)
-                : null;
+          const output =
+            typeof value === "string"
+              ? await redactString(value)
+              : null;
 
-            translations[input] = output;
+          translations[input] = output;
 
-            return resolve();
-          })
-      );
+          return resolve();
+        })
+    );
   });
 
   for (const fn of promises) {
@@ -202,7 +237,7 @@ const redactString = async (
     logs.redactInputString(string);
 
     const response = await redact.redact(string);
-    if(response.success) {
+    if (response.success) {
       var redactedString = response.result.redacted_text
     }
 
