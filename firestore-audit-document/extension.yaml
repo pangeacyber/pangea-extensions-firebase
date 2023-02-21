@@ -1,0 +1,161 @@
+# Pangea Cyber 2023 Pange Cyber Inc
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: firestore-audit-document
+version: 0.0.3
+specVersion: v1beta
+
+displayName: Critical Document Auditing
+description: Monitors the specified Firestore collection and logs the changes to its documents on a tamper-proof blockchain using Pangea's Secure Audit Log service.
+
+license: Apache-2.0
+
+sourceUrl: https://github.com/pangeacyber/pangea-extensions-firebase/tree/main/firestore-audit-document
+releaseNotesUrl: https://github.com/pangeacyber/pangea-extensions-firebase/blob/main/firestore-audit-document/CHANGELOG.md
+
+author:
+  authorName: Pangea Cyber
+  url: https://pangea.cloud
+
+contributors:
+  - authorName: Nicolas Vautier
+    email: nvautier@digitaljoyride.com
+    url: https://github.com/developerEnvY
+
+billingRequired: true
+
+externalServices:
+  - name: Pangea
+    PricingUri: https://pangea.cloud/pricing
+
+apis:
+  - apiName: run.googleapis.com
+    reason: Powers v2 functions
+
+roles:
+  - role: datastore.user
+    reason: Allows the extension to read/write to Cloud Firestore.
+
+resources:
+  - name: firestore_doc_audit
+    type: firebaseextensions.v1beta.function
+    description: Listens for changes to documents in the specified Cloud Firestore collection and logs them using Pangea's Secure Audit Log service.
+    properties:
+      location: ${param:LOCATION}
+      runtime: nodejs14
+      eventTrigger:
+        eventType: providers/cloud.firestore/eventTypes/document.write
+        resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${param:COLLECTION_PATH}/{messageId}
+
+params:
+  - param: LOCATION
+    label: Cloud Functions location
+    description: >-
+      Where do you want to deploy the functions created for this extension?
+      You usually want a location close to your database. For help selecting a
+      location, refer to the [location selection
+      guide](https://firebase.google.com/docs/functions/locations).
+    type: select
+    options:
+      - label: Iowa (us-central1)
+        value: us-central1
+      - label: South Carolina (us-east1)
+        value: us-east1
+      - label: Northern Virginia (us-east4)
+        value: us-east4
+      - label: Los Angeles (us-west2)
+        value: us-west2
+      - label: Salt Lake City (us-west3)
+        value: us-west3
+      - label: Las Vegas (us-west4)
+        value: us-west4
+      - label: Warsaw (europe-central2)
+        value: europe-central2
+      - label: Belgium (europe-west1)
+        value: europe-west1
+      - label: London (europe-west2)
+        value: europe-west2
+      - label: Frankfurt (europe-west3)
+        value: europe-west3
+      - label: Zurich (europe-west6)
+        value: europe-west6
+      - label: Taiwan (asia-east1)
+        value: asia-east1
+      - label: Hong Kong (asia-east2)
+        value: asia-east2
+      - label: Tokyo (asia-northeast1)
+        value: asia-northeast1
+      - label: Osaka (asia-northeast2)
+        value: asia-northeast2
+      - label: Seoul (asia-northeast3)
+        value: asia-northeast3
+      - label: Mumbai (asia-south1)
+        value: asia-south1
+      - label: Singapore (asia-southeast1)
+        value: asia-southeast1
+      - label: Jakarta (asia-southeast2)
+        value: asia-southeast2
+      - label: Montreal (northamerica-northeast1)
+        value: northamerica-northeast1
+      - label: Sao Paulo (southamerica-east1)
+        value: southamerica-east1
+      - label: Sydney (australia-southeast1)
+        value: australia-southeast1
+    default: us-central1
+    required: true
+    immutable: true
+
+  - param: PANGEA_DOMAIN
+    label: Pangea service base domain
+    description: >
+      The base domain of where your Pangea Service is deployed. The **Domain** value can be copied from the main dashboard of the [Pangea Console](https://console.pangea.cloud).
+    type: select
+    options:
+      - label: gcp.us.pangea.cloud
+        value: gcp.us.pangea.cloud
+      - label: gcp.eu.pangea.cloud
+        value: gcp.eu.pangea.cloud
+      - label: aws.us.pangea.cloud
+        value: aws.us.pangea.cloud
+      - label: aws.eu.pangea.cloud
+        value: aws.eu.pangea.cloud
+    default: gcp.us.pangea.cloud
+    required: true
+    immutable: true
+
+  - param: PANGEA_SERVICE_TOKEN
+    label: Pangea Auth Token with access to the Audit Log service
+    description: >
+      The Pangea Token to use to authenticate access to the Audit Log service. The **Token** value can be copied from the [Audit Log Dashboard](https://console.pangea.cloud/service/audit/logs) of the Pangea Console.
+    type: secret
+    example: pts_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    validationRegex: "^pts_[a-z2-7]{32}$"
+    validationErrorMessage: Must be a valid Pangea Auth Token
+    required: true
+
+  - param: COLLECTION_PATH
+    label: Collection path
+    description: >
+      What is the path to the collection that will be audited?
+    example: patients
+    validationRegex: "^[^/]+(/[^/]+/[^/]+)*$"
+    validationErrorMessage: Must be a valid Cloud Firestore Collection
+    required: true
+
+  - param: FIELDS_TO_AUDIT
+    label: Fields to audit
+    description: >
+      Enter the fields that needs auditing. Please use comma to between the field names. If all the fields need to be audited then leave this parameter empty.
+    example: first_name,last_name,email
+    required: false
