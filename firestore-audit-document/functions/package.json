@@ -1,6 +1,6 @@
 {
   "name": "firestore-sensitive-document-audit-functions",
-  "description": "Monitors documents on a Firestore collection and logs the changes using Pangea's Secure Audit Log service.",
+  "description": "Monitors documents in a Firestore collection and logs the changes using the Pangea Secure Audit Log service.",
   "author": "Pangea Cyber",
   "license": "Apache-2.0",
   "main": "lib/index.js",
