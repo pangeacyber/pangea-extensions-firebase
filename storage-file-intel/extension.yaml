@@ -13,12 +13,12 @@
 # limitations under the License.
 
 name: storage-file-intel
-version: 0.1.37
+version: 0.1.39
 specVersion: v1beta
 
-displayName: File Reputation Scanning
+displayName: Known Malware Detection
 description:
-  Scans files uploaded to Cloud Storage for known malicious behavior, isolates the file in a gzip formatted container if deemed malicious, and optionally keeps or deletes the original file.
+  Checks files uploaded to Cloud Storage for known malicious behavior, isolates the file in a gzip formatted container if deemed malicious, and optionally keeps or deletes the original file.
 
 license: Apache-2.0
 
@@ -153,7 +153,7 @@ params:
   - param: IMG_BUCKET
     label: Cloud Storage bucket to secure
     description: >
-      To which Cloud Storage bucket will you upload files that you want to scan for malicious behavior?
+      To which Cloud Storage bucket will you upload files that you want to monitor for malicious behavior?
       Files deemed malicious are copied into in a gzip formatted container and the original is then either
       kept or deleted, depending on your extension configuration. Isolated files will also be stored in this bucket.
       It is recommended to create a separate bucket for this extension. For more information, refer to the
@@ -208,16 +208,16 @@ params:
     required: true
 
   - param: INCLUDE_PATH_LIST
-    label: Paths that contain files you want to scan for malious behavior
+    label: Paths that contain files you want to monitor for malious behavior
     description: >
-      Restrict pangea-file-intel to only scan files in specific locations in your Storage bucket by
-      supplying a comma-separated list of absolute paths. For example, to only scan files
+      Restrict this extension to only check files in specific locations in your Storage bucket by
+      supplying a comma-separated list of absolute paths. For example, to only check files
       stored in the `/users/uploads` and `/user/inbox` directories, specify the paths `/users/uploads,/user/inbox`.
 
       You may also use wildcard notation for directories in the path. For example, `/users/*/uploads`
       would match `/users/user1/uploads/image.png` as well as  `/users/user2/uploads/any/sub/directory/image.png`.
 
-      If you prefer to scan every file uploaded to your Storage bucket,
+      If you prefer to monitor every file uploaded to your Storage bucket,
       leave this field empty.
     type: string
     example: "/users/avatars,/design/pictures"
@@ -227,16 +227,16 @@ params:
     required: false
 
   - param: EXCLUDE_PATH_LIST
-    label: List of absolute paths not to scan for malious behavior
+    label: List of absolute paths not to monitor for malious behavior
     description: >
-      Ensure pangea-file-intel does *not* scan files in _specific locations_ in your Storage bucket by
+      Ensure this extension does *not* check files in _specific locations_ in your Storage bucket by
       supplying a comma-separated list of absolute paths. For example, to *exclude* the files
       stored in the `/users/sandbox` and `/general/items` directories, specify the paths `/users/sandbox,/general/items`.
 
       You may also use wildcard notation for directories in the path. For example, `/users/*/pictures`
       would exclude `/users/user1/pictures/image.png` as well as `/users/user2/pictures/any/sub/directory/image.png`.
 
-      If you prefer to scan every file uploaded to your Storage bucket,
+      If you prefer to monitor every file uploaded to your Storage bucket,
       leave this field empty.
     type: string
     example: "/users/avatars/thumbs,/design/pictures/thumbs"

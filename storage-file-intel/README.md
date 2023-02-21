@@ -1,20 +1,20 @@
-# File Reputation Scanning
+# Known Malware Detection
 
 **Author**: Pangea Cyber (**[https://pangea.cloud](https://pangea.cloud)**)
 
-**Description**: Scans files uploaded to Cloud Storage for known malicious behavior, isolates the file in a gzip formatted container if deemed malicious, and optionally keeps or deletes the original file.
+**Description**: Checks files uploaded to Cloud Storage for known malicious behavior, isolates the file in a gzip formatted container if deemed malicious, and optionally keeps or deletes the original file.
 
 
 
-**Details**: Use this extension to automatically scans files uploaded to a Cloud Storage bucket for malicious behavior. It will compare the hash of the file to against a list of 25 million known malicious files.
+**Details**: Use this extension to automatically check files uploaded to a Cloud Storage bucket for malicious behavior. It will compare the hash of the file to against a list of 25 million known malicious files.
 
-When you upload a file to your specified Cloud Storage bucket, this extension:
+When a user uploads a file to your specified Cloud Storage bucket, this extension:
 
 - Detects if the file is a known malicious file. If it is, then:
   - Neutralizes the file by copying the file to a gzip formatted container.
   - Optionally, deletes the original file.
 
-The extension can publish a file scanned completion event which you can optionally enable when you install the extension. If you enable events, you can [write custom event handlers](https://firebase.google.com/docs/extensions/install-extensions#eventarc) that respond to these events. You can always enable or disable events later. Events will be emitted via Eventarc.
+The extension can publish a completion event which you can optionally enable when you install the extension. If you enable events, you can [write custom event handlers](https://firebase.google.com/docs/extensions/install-extensions#eventarc) that respond to these events. You can always enable or disable events later. Events will be emitted via Eventarc.
 
 #### Detailed configuration information
 
@@ -67,7 +67,7 @@ Usage of this extension also requires you to have a [Pangea](https://pangea.clou
 * A Pangea Auth Token with access to the File Intel service: Used to authenticate access to Pangea services.
 
 
-* Cloud Storage bucket for images: To which Cloud Storage bucket will you upload files that you want to scan for malicious behavior? Files deemed malicious are copied into in a gzip formatted container and the original is then either kept or deleted, depending on your extension configuration. Isolated files will also be stored in this bucket. It is recommended to create a separate bucket for this extension. For more information, refer to the [pre-installation guide](https://firebase.google.com/products/extensions/pangea-file-intel).
+* Cloud Storage bucket to secure: To which Cloud Storage bucket will you upload files that you want to scan for malicious behavior? Files deemed malicious are copied into in a gzip formatted container and the original is then either kept or deleted, depending on your extension configuration. Isolated files will also be stored in this bucket. It is recommended to create a separate bucket for this extension. For more information, refer to the [pre-installation guide](https://firebase.google.com/products/extensions/pangea-file-intel).
 
 
 * Absolute path to move the zipped malicious files: An absolute path in which to store the gzip container used to neturalize the malicious file that was uploaded. For example, if you specify a path here of `/malicious` and a file is uploaded to `/documents/virus.exe`, then the zip file is stored at `/malicious/virus_exe.zip`. If you prefer to store isolated files at the root of your bucket, leave this field empty.
@@ -83,7 +83,7 @@ You may also use wildcard notation for directories in the path. For example, `/u
 If you prefer to scan every file uploaded to your Storage bucket, leave this field empty.
 
 
-* List of absolute paths not to scan for malious behavior: Ensure pangea-file-intel does *not* scan files in _specific locations_ in your Storage bucket by supplying a comma-separated list of absolute paths. For example, to *exclude* the images stored in the `/users/sandbox` and `/general/items` directories, specify the paths `/users/sandbox,/general/items`.
+* List of absolute paths not to scan for malious behavior: Ensure pangea-file-intel does *not* scan files in _specific locations_ in your Storage bucket by supplying a comma-separated list of absolute paths. For example, to *exclude* the files stored in the `/users/sandbox` and `/general/items` directories, specify the paths `/users/sandbox,/general/items`.
 You may also use wildcard notation for directories in the path. For example, `/users/*/pictures` would exclude `/users/user1/pictures/image.png` as well as `/users/user2/pictures/any/sub/directory/image.png`.
 If you prefer to scan every file uploaded to your Storage bucket, leave this field empty.
 
@@ -94,7 +94,7 @@ If you prefer to scan every file uploaded to your Storage bucket, leave this fie
 
 **Cloud Functions:**
 
-* **checkFileReputation:** Listens for new files uploaded to your specified Cloud Storage bucket, checks the file's reputation againt a database of 25 millions known malicious files, and isolates the file in gzip formatted container if it is deemed . Optionally keeps or deletes the original images.
+* **checkFileReputation:** Listens for new files uploaded to your specified Cloud Storage bucket, checks the file's reputation againt a database of 25 millions known malicious files, and isolates the file in gzip formatted container if it is deemed . Optionally keeps or deletes the original file.
 
 
 
@@ -110,4 +110,4 @@ If you prefer to scan every file uploaded to your Storage bucket, leave this fie
 
 This extension will operate with the following project IAM roles:
 
-* storage.admin (Reason: Allows the extension to store resized images in Cloud Storage)
+* storage.admin (Reason: Allows the extension to store neutralized files in Cloud Storage)
