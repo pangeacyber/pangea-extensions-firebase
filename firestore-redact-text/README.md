@@ -2,7 +2,7 @@
 
 **Author**: Pangea Cyber (**[https://pangea.cloud](https://pangea.cloud)**)
 
-**Description**: Redact sensitive or Personally Identifiable Information (PII) information such as names, phone, credit card or social security numbers from strings written to a Cloud Firestore collection based on defined rulesets (uses the Pangea Redact API).
+**Description**: Redact sensitive or Personally Identifiable Information (PII) such as names, phone, credit card or social security numbers from strings written to a Cloud Firestore collection based on defined rulesets (uses the Pangea Redact API).
 
 
 

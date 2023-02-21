@@ -18,7 +18,7 @@ specVersion: v1beta
 
 displayName: Redact Text
 description:
-  Redact sensitive or Personally Identifiable Information (PII) information such as names, phone, credit card or social security numbers from strings written to a Cloud Firestore collection based on defined rulesets (uses the Pangea Redact API).
+  Redact sensitive or Personally Identifiable Information (PII) such as names, phone, credit card or social security numbers from strings written to a Cloud Firestore collection based on defined rulesets (uses the Pangea Redact API).
 
 license: Apache-2.0
 
