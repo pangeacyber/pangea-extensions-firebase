@@ -1,8 +1,8 @@
-Use this extension to log changes to a Firestore collection. The extension is mostly useful for collections that contain sensitive data. In order to audit multiple collections, the extension needs to be installed multiple times with corresponding collection names.
+Use this extension to log changes to a Firestore collection. The extension is useful to monitor collections that contain compliance-critical data. To audit multiple collections, the extension can be installed multiple times with corresponding collection names.
 
 This extension:
 
-- Listens to Firestore events for the specified collection. Every create/update/delete requests to the collection will be logged to Pangea's Secure Audit Log service. [Pangea Secure Audit Service](https://pangea.cloud/services/audit-log/).  
+- Listens to Firestore events for the specified collection. Every create/update/delete requests to the collection will be logged to Pangea's [Secure Audit Log](https://pangea.cloud/services/audit-log/) service.  
 
 #### Additional setup
 

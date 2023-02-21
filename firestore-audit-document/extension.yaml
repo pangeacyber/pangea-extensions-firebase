@@ -12,17 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: firestore-sensitive-document-audit
-version: 0.0.1
+name: firestore-audit-document
+version: 0.0.3
 specVersion: v1beta
 
-displayName: Pangea Sensitive Document Audit
-description: Scans the specified Firestore collection and logs the changes to its documents using Pangea's Secure Audit Log service.
+displayName: Critical Document Auditing
+description: Monitors the specified Firestore collection and logs the changes to its documents on a tamper-proof blockchain using Pangea's Secure Audit Log service.
 
 license: Apache-2.0
 
-sourceUrl: https://github.com/pangeacyber/pangea-extensions-firebase/tree/main/firestore-sensitive-document-audit
-releaseNotesUrl: https://github.com/pangeacyber/pangea-extensions-firebase/blob/main/firestore-sensitive-document-audit/CHANGELOG.md
+sourceUrl: https://github.com/pangeacyber/pangea-extensions-firebase/tree/main/firestore-audit-document
+releaseNotesUrl: https://github.com/pangeacyber/pangea-extensions-firebase/blob/main/firestore-audit-document/CHANGELOG.md
 
 author:
   authorName: Pangea Cyber
@@ -31,7 +31,7 @@ author:
 contributors:
   - authorName: Nicolas Vautier
     email: nvautier@digitaljoyride.com
-    url: https://github.com/pangea-nv
+    url: https://github.com/developerEnvY
 
 billingRequired: true
 
@@ -40,8 +40,6 @@ externalServices:
     PricingUri: https://pangea.cloud/pricing
 
 apis:
-  - apiName: eventarc.googleapis.com
-    reason: Powers all events and triggers
   - apiName: run.googleapis.com
     reason: Powers v2 functions
 
@@ -150,7 +148,7 @@ params:
     label: Collection path
     description: >
       What is the path to the collection that will be audited?
-    example: patient_records
+    example: patients
     validationRegex: "^[^/]+(/[^/]+/[^/]+)*$"
     validationErrorMessage: Must be a valid Cloud Firestore Collection
     required: true
