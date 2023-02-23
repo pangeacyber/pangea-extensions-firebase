@@ -14,7 +14,9 @@ If the original input field of the document is updated, a new log entry will be 
 Each log is comprised of a set of fields designed to record specific components of the activity being recorded. The only required field is message, with all others being optional.
 
 ```js
-getFirestore().collection('audit').add("Record created");
+getFirestore().collection('audit').add({
+  log: "Record created"
+});
 ```
 
 #### Logging messages with optional metadata (Firestore)
@@ -23,13 +25,15 @@ To create an entry with optional metadata fields, store a map containing the opt
 
 ```js
 getFirestore().collection('audit').add({
-  message: "Record created with metadata",
-  actor:  "User 1",
-  action: "Create",
-  source: "Firebase client",
-  target: "Database",
-  status: "Completed",
-})
+  log: {
+    message: "Record created with metadata",
+    actor:  "User 1",
+    action: "Create",
+    source: "Firebase client",
+    target: "Database",
+    status: "Completed",
+  }
+});
 ```
 
 #### Multiple log entries (Firestore)
@@ -37,32 +41,34 @@ getFirestore().collection('audit').add({
 To log multiple entries, store an array of either maps or strings:
 
 ```js
-getFirestore().collection('audit').add([
-  {
-    message: "First record created",
-    actor:  "User 1",
-    action: "Create",
-    source: "Firebase client",
-    target: "Database",
-    status: "Completed",
-  },
-  {
-    message: "Second record created",
-    actor:  "User 1",
-    action: "Create",
-    source: "Firebase client",
-    target: "Database",
-    status: "Completed",
-  },
-  {
-    message: "Third record created",
-    actor:  "User 1",
-    action: "Create",
-    source: "Firebase client",
-    target: "Database",
-    status: "Completed",
+getFirestore().collection('audit').add({
+  log: {
+    [{
+      message: "First record created",
+      actor:  "User 1",
+      action: "Create",
+      source: "Firebase client",
+      target: "Database",
+      status: "Completed",
+    },
+    {
+      message: "Second record created",
+      actor:  "User 1",
+      action: "Create",
+      source: "Firebase client",
+      target: "Database",
+      status: "Completed",
+    },
+    {
+      message: "Third record created",
+      actor:  "User 1",
+      action: "Create",
+      source: "Firebase client",
+      target: "Database",
+      status: "Completed",
+    }]
   }
-])
+});
 ```
 
 #### Logging messages (EventArc)
