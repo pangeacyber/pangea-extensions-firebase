@@ -22,8 +22,8 @@ If the original input field of the document is updated, a new log entry will be 
 Each log is comprised of a set of fields designed to record specific components of the activity being recorded. The only required field is message, with all others being optional.
 
 ```js
-getFirestore().collection('audit').add({
-  log: "Record created"
+getFirestore().collection("audit").add({
+  log: "Record created",
 });
 ```
 
@@ -32,15 +32,15 @@ getFirestore().collection('audit').add({
 To create an entry with optional metadata fields, store a map containing the optional fields as keys and values as strings.
 
 ```js
-getFirestore().collection('audit').add({
+getFirestore().collection("audit").add({
   log: {
     message: "Record created with metadata",
-    actor:  "User 1",
+    actor: "User 1",
     action: "Create",
     source: "Firebase client",
     target: "Database",
     status: "Completed",
-  }
+  },
 });
 ```
 
@@ -49,11 +49,11 @@ getFirestore().collection('audit').add({
 To log multiple entries, store an array of either maps or strings:
 
 ```js
-getFirestore().collection('audit').add({
-  log: {
-    [{
+getFirestore().collection("audit").add({
+  log: [
+    {
       message: "First record created",
-      actor:  "User 1",
+      actor: "User 1",
       action: "Create",
       source: "Firebase client",
       target: "Database",
@@ -61,7 +61,7 @@ getFirestore().collection('audit').add({
     },
     {
       message: "Second record created",
-      actor:  "User 1",
+      actor: "User 1",
       action: "Create",
       source: "Firebase client",
       target: "Database",
@@ -69,13 +69,13 @@ getFirestore().collection('audit').add({
     },
     {
       message: "Third record created",
-      actor:  "User 1",
+      actor: "User 1",
       action: "Create",
       source: "Firebase client",
       target: "Database",
       status: "Completed",
-    }]
-  }
+    },
+  ],
 });
 ```
 
