@@ -14,6 +14,15 @@
  * limitations under the License.
  */
 
+ function toBool(str) {
+   switch (str) {
+     case "true":
+       return true;
+     default:
+       return false;
+   }
+ }
+
 export default {
   location: process.env.LOCATION,
   inputFieldName: process.env.INPUT_FIELD_NAME,
@@ -21,4 +30,5 @@ export default {
   pangeaDomain: process.env.PANGEA_DOMAIN,
   redactToken: process.env.PANGEA_REDACT_TOKEN,
   collectionPath: process.env.COLLECTION_PATH,
+  bigqueryTransform: toBool(process.env.BIGQUERY_TRANSFORM),
 };

@@ -115,3 +115,7 @@ export const updateDocument = (path: string) => {
 export const updateDocumentComplete = (path: string) => {
   logger.log(messages.updateDocumentComplete(path));
 };
+
+export const tranformFunctionNotEnabled = () => {
+  logger.log(messages.tranformFunctionNotEnabled());
+};

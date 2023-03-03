@@ -61,14 +61,7 @@ resources:
         eventType: providers/cloud.firestore/eventTypes/document.write
         resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${param:COLLECTION_PATH}/{messageId}
 
-  - name: pangea_redact_bq_onc
-    type: firebaseextensions.v1beta.function
-    properties:
-      location: ${LOCATION}
-      runtime: nodejs14
-      httpsTrigger: {}
-  
-  - name: pangea_redact_bq_onr
+  - name: bigquery_transform
     type: firebaseextensions.v1beta.function
     properties:
       location: ${LOCATION}
@@ -185,4 +178,17 @@ params:
       What is the name of the field where you want to store the redacted version the string?
     example: redacted
     default: redacted
+    required: true
+
+  - param: BIGQUERY_TRANSFORM
+    label: Enable BigQuery transfrom function
+    description: >
+      If enabled an HTTP transfrom function will be exposed to allow streaming redacted versions of your collections to BigQuery using the [Stream Collections to BigQuery](https://extensions.dev/extensions/firebase/firestore-bigquery-export) Extension. If you enable this feature you should configure the HTTP endpoint's visiblity to private using the GCP console.
+    type: select
+    options:
+      - label: No
+        value: false
+      - label: Yes
+        value: true
+    default: false
     required: true

@@ -65,4 +65,5 @@ export const messages = {
     `Updating Cloud Firestore document: '${path}'`,
   updateDocumentComplete: (path: string) =>
     `Finished updating Cloud Firestore document: '${path}'`,
+  tranformFunctionNotEnabled: () => "Enable the Redact Text transfrom function paramter before calling this method.",
 };

@@ -21,6 +21,7 @@ import { asyncPool } from "./utils";
 
 import config from "./config";
 import * as logs from "./logs";
+import { messages } from "./logs/messages";
 import * as validators from "./validators";
 
 const POOL_SIZE = 3;
@@ -74,16 +75,15 @@ export const fsredact = functions.firestore.document(config.collectionPath).onWr
   }
 );
 
-export const pangea_redact_bq_onc = functions.https.onCall(async (payload, context) => {
-  try {
-    const data = await redactBigQueryPayload(payload);
-    return { data };
-  } catch (err) {
-    return Promise.reject(err);
-  }
-});
+export const bigquery_transform = functions.https.onRequest(async (req, res) => {
 
-export const pangea_redact_bq_onr = functions.https.onRequest(async (req, res) => {
+  if(config.bigqueryTransform != true) {
+    logs.tranformFunctionNotEnabled();
+    res.status(405)
+       .send({ status: 'Method Not Allowed', code: 405, message: messages.tranformFunctionNotEnabled });
+    return;
+  }
+
   try {
     const data = await redactBigQueryPayload(req.body?.data);
     res.send({ data });
