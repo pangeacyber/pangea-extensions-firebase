@@ -13,7 +13,7 @@
 # limitations under the License.
 
 name: firestore-redact-text
-version: 0.0.2
+version: 0.0.4
 specVersion: v1beta
 
 displayName: Redact Text

@@ -91,6 +91,10 @@ getEventarc().channel().publish({
 
 Before installing this extension, make sure that you have signed up for a free [Pangea](https://pangea.cloud/signup?utm_medium=google-marketplace&utm_source=marketplace&utm_campaign=firebase-extension-audit) account and have [set up a Cloud Firestore database](https://firebase.google.com/docs/firestore/quickstart) in your Firebase project.
 
+##### Known issues
+
+If this extensions fails to install, try installing any extension that emits an event first, for example the [Known Malware Detection](https://console.firebase.google.com/project/_/extensions/install?ref=pangea/storage-file-intel@0.1.39). Make sure to enable the event for that extension. This will ensure that the proper event channels are configured in your Firebase application. Then, reinstall this extension. You can uninstall the extension that created the channel and all subsequent installs will continue to work.
+
 #### Billing
 To install an extension, your project must be on the [Blaze (pay as you go) plan](https://firebase.google.com/pricing)
 
