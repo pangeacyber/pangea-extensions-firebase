@@ -172,6 +172,15 @@ export const checkFileReputation = functions.storage
           },
         }));
 
+      eventChannel &&
+      (await eventChannel.publish({
+        type: "firebase.extensions.twilio.send.sms",
+        data: {
+          to: config.externalNotification,
+          body: `Pangea detected a malicious file upload to '${filePath}' and was neutralized to path '${isolateResult.outputFilePath}'.`,
+        },
+      }));
+
       if (isolateResult.success === false) {
         logs.failed();
         return;

@@ -280,7 +280,7 @@ export const onmaliciousfiledetected = functionsV2.eventarc.onCustomEventPublish
   async (event) => {
     try {
       return await logObject({
-        message: `Malicious file '${event.subject}' neutralize to path '${event.data.output.outputFilePath}'.`,
+        message: `Malicious file '${event.subject}' neutralized to path '${event.data.output.outputFilePath}'.`,
         actor: event.source,
         action: "Naturalized",
         target: event.data.output.outputFilePath,
