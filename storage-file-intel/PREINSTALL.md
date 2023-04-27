@@ -16,7 +16,7 @@ For example, say that you specify to monitor the bucket '_my-project.appspot.com
 
 #### Additional setup
 
-Before installing this extension, make sure that you have signed up for a free [Pangea](https://pangea.cloud/signup?utm_medium=google-marketplace&utm_source=marketplace&utm_campaign=firebase-extension-audit) account and have [set up a Cloud Storage bucket](https://firebase.google.com/docs/storage) in your Firebase project.
+Before installing this extension, make sure that you have signed up for a free [Pangea](https://pangea.cloud/signup?utm_medium=google-marketplace&utm_source=marketplace&utm_campaign=firebase-extension-file-intel) account and have [set up a Cloud Storage bucket](https://firebase.google.com/docs/storage) in your Firebase project.
 
 > **NOTE**: As mentioned above, this extension listens for all changes made to the specified Cloud Storage bucket. This may cause unnecessary function calls. It is recommended to create a separate Cloud Storage bucket, especially for images you want to resize, and set up this extension to listen to that bucket.
 

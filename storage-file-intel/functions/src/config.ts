@@ -43,5 +43,6 @@ export default {
   includePathList: paramToArray(process.env.INCLUDE_PATH_LIST),
   excludePathList: paramToArray(process.env.EXCLUDE_PATH_LIST),
   pangeaDomain: process.env.PANGEA_DOMAIN,
-  pangeaToken: process.env.PANGEA_FILE_INTEL_TOKEN
+  pangeaToken: process.env.PANGEA_FILE_INTEL_TOKEN,
+  externalNotification: process.env.EXTERNAL_NOTIFICATION_PARAMETER
 };

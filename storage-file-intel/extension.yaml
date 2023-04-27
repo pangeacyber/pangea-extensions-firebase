@@ -13,7 +13,7 @@
 # limitations under the License.
 
 name: storage-file-intel
-version: 0.1.39
+version: 0.1.40
 specVersion: v1beta
 
 displayName: Known Malware Detection
@@ -262,6 +262,20 @@ params:
     required: true
     immutable: false
 
+  - param: EXTERNAL_NOTIFICATION_PARAMETER
+    label: SMS Notification Phone Number 
+    description: > 
+      An E.164 formatted phone number to send SMS notifications to when a file is deemed malicious. This requires that the Twilio Send Message Extension is installed and that this the 'firebase.extensions.twilio.send.sms' event is enabled below.
+    type: string
+    example: "+13055671234"
+    validationRegex: ^\+[1-9]\d{1,14}$
+    validationErrorMessage:
+      Invalid phone number, must be an  E.164 formatted number.
+    required: false
+
 events:
   - type: firebase.extensions.pangea-file-intel.v1.complete
-    description: Occurs when an uploaded file is deemed malious. The event will contain details about the threat factors used to calculate the verdict.
+    description: Occurs when an uploaded file is deemed malicious. The event will contain details about the threat factors used to calculate the verdict.
+
+  - type: firebase.extensions.twilio.send.sms
+    description: Notify the Twilio Send Message Extension, if it is installed, to trigger an SMS notification when an uploaded file is deemed malicious.
