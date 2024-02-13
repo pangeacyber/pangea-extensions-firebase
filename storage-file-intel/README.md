@@ -70,10 +70,10 @@ Usage of this extension also requires you to have a [Pangea](https://pangea.clou
 * Cloud Storage bucket to secure: To which Cloud Storage bucket will you upload files that you want to monitor for malicious behavior? Files deemed malicious are copied into in a gzip formatted container and the original is then either kept or deleted, depending on your extension configuration. Isolated files will also be stored in this bucket. It is recommended to create a separate bucket for this extension. For more information, refer to the [pre-installation guide](https://firebase.google.com/products/extensions/pangea-file-intel).
 
 
-* Absolute path to move the zipped malicious files: An absolute path in which to store the gzip container used to neturalize the malicious file that was uploaded. For example, if you specify a path here of `/malicious` and a file is uploaded to `/documents/virus.exe`, then the zip file is stored at `/malicious/virus_exe.zip`. If you prefer to store isolated files at the root of your bucket, leave this field empty.
+* Absolute path to move the zipped malicious files: An absolute path in which to store the gzip container used to neutralize the malicious file that was uploaded. For example, if you specify a path here of `/malicious` and a file is uploaded to `/documents/virus.exe`, then the zip file is stored at `/malicious/virus_exe.zip`. If you prefer to store isolated files at the root of your bucket, leave this field empty.
 
 
-* A password to protect the gzip container: A password to protect the gzip container used to neturalize the malicious file that was uploaded. The password will be required to extract the gzip container and analyze the malicious file. If you prefer not to password protect your gzip file, leave this field empty.
+* A password to protect the gzip container: A password to protect the gzip container used to neutralize the malicious file that was uploaded. The password will be required to extract the gzip container and analyze the malicious file. If you prefer not to password protect your gzip file, leave this field empty.
 
 
 * Deletion of original file: Do you want to automatically delete the original file from the Cloud Storage bucket if it deemed malicious? Note that these deletions cannot be undone.
