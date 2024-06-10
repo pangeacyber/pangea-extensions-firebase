@@ -18,7 +18,7 @@ import * as admin from "firebase-admin";
 import { getEventarc } from "firebase-admin/eventarc";
 import * as fs from "fs";
 import * as functions from "firebase-functions";
-import * as mkdirp from "mkdirp";
+import { mkdirp } from "mkdirp";
 import * as os from "os";
 import * as path from "path";
 import * as crypto from "crypto";
