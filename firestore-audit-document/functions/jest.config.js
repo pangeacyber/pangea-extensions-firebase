@@ -1,15 +1,9 @@
 const packageJson = require("./package.json");
 
+/** @type {import('jest').Config} */
 module.exports = {
-  name: packageJson.name,
   displayName: packageJson.name,
-  rootDir: "./",
-  globals: {
-    "ts-jest": {
-      tsConfig: "<rootDir>/__tests__/tsconfig.json",
-    },
-  },
+  testEnvironment: "node",
   preset: "ts-jest",
-  setupFiles: ["<rootDir>/__tests__/jest.setup.ts"],
   testMatch: ["**/__tests__/*.test.ts"],
 };
