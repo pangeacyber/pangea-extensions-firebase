@@ -57,7 +57,7 @@ export const fieldNamesNotDifferent = () => {
   logger.error(messages.fieldNamesNotDifferent());
 };
 
-export const init = (config) => {
+export const init = (config: {}) => {
   logger.log(...messages.init(config));
 };
 
@@ -65,7 +65,7 @@ export const inputFieldNameIsOutputPath = () => {
   logger.error(messages.inputFieldNameIsOutputPath());
 };
 
-export const start = (config) => {
+export const start = (config: {}) => {
   logger.log(...messages.start(config));
 };
 
@@ -77,31 +77,21 @@ export const redactStringComplete = (string: string) => {
   logger.log(messages.redactStringComplete(string));
 };
 
-export const redactStringError = (
-  string: string,
-  err: Error
-) => {
+export const redactStringError = (string: string, err: Error) => {
   logger.error(...messages.redactStringError(string, err));
 };
-export const redactSingleString = (
-  string: string
-) => {
+export const redactSingleString = (string: string) => {
   logger.log(messages.redactSingleString(string));
 };
 export const redactSingleStringComplete = (string: string) => {
   logger.log(messages.redactSingleStringComplete(string));
 };
 
-export const redactSingleStringError = (
-  string: string,
-  err: Error
-) => {
+export const redactSingleStringError = (string: string, err: Error) => {
   logger.error(...messages.redactSingleStringError(string, err));
 };
 
-export const redactMultipleStrings = (
-  input: object
-) => {
+export const redactMultipleStrings = (input: object) => {
   logger.log(messages.redactMultipleStrings(input));
 };
 export const redactMultipleStringsComplete = (input: object) => {

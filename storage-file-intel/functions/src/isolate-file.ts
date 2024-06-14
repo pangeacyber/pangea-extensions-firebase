@@ -20,10 +20,10 @@ import * as logs from "./logs";
 import * as os from "os";
 import * as path from "path";
 import * as fs from "fs";
-import * as Archiver from 'archiver';
-import * as ArchiverEncrypted from 'archiver-zip-encrypted';
-if(config.zipPassword !== undefined)
-  Archiver.registerFormat('zip-encrypted', ArchiverEncrypted);
+import * as Archiver from "archiver";
+import * as ArchiverEncrypted from "archiver-zip-encrypted";
+if (config.zipPassword !== undefined)
+  Archiver.registerFormat("zip-encrypted", ArchiverEncrypted);
 
 import { Bucket } from "@google-cloud/storage";
 import { storage } from "firebase-functions";
@@ -53,7 +53,9 @@ export const isolateFile = async ({
 
   logs.isolatingFile(originalFile);
 
-  let modifiedFileName = `${fileNameWithoutExtension}_${fileExtension.slice(1)}.zip`;
+  let modifiedFileName = `${fileNameWithoutExtension}_${fileExtension.slice(
+    1
+  )}.zip`;
 
   // Path where the zip file will be uploaded to in Storage.
   const modifiedFilePath = path.normalize(
@@ -98,29 +100,33 @@ export const isolateFile = async ({
 
       let archive;
       if (config.zipPassword === undefined) {
-        archive = Archiver('zip', {
-          zlib: { level: 8 }
+        archive = Archiver("zip", {
+          zlib: { level: 8 },
         });
       } else {
         // create archive and specify method of encryption and password
-        archive = Archiver.create('zip-encrypted', {
+        archive = Archiver.create("zip-encrypted", {
           zlib: { level: 8 },
-          encryptionMethod: 'aes256',
-          password: config.zipPassword
+          encryptionMethod: "aes256",
+          password: config.zipPassword,
         });
       }
 
       // listen for all archive data to be written
-      output.on('close', function() {
-        console.log(archive.pointer() + ' total bytes');
-        console.log('archiver has been finalized and the output file descriptor has closed.');
+      output.on("close", function () {
+        console.log(archive.pointer() + " total bytes");
+        console.log(
+          "archiver has been finalized and the output file descriptor has closed."
+        );
         resolve();
       });
 
       // pipe archive data to the file
       archive.pipe(output);
       // append a file
-      archive.file(originalFile, { name: fileNameWithoutExtension +  fileExtension});
+      archive.file(originalFile, {
+        name: fileNameWithoutExtension + fileExtension,
+      });
       // finalize the archive ('close', 'end' or 'finish' may be fired right after calling this method)
       archive.finalize();
     });
@@ -142,18 +148,18 @@ export const isolateFile = async ({
 
     return { outputFilePath: modifiedFilePath, success: true };
   } catch (err) {
-    logs.error(err);
+    logs.error(err as Error);
     return { outputFilePath: modifiedFilePath, success: false };
   } finally {
     try {
       // Make sure the local zip file is cleaned up to free up disk space.
-      if (modifiedFile) {
+      if (modifiedFile!) {
         logs.tempFileDeleting(modifiedFilePath);
         fs.unlinkSync(modifiedFile);
         logs.tempFileDeleted(modifiedFilePath);
       }
     } catch (err) {
-      logs.errorDeleting(err);
+      logs.errorDeleting(err as Error);
     }
   }
 };

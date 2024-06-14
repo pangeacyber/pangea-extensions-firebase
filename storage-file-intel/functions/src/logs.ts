@@ -15,6 +15,7 @@
  */
 
 import { logger } from "firebase-functions";
+import { PangeaErrors } from "pangea-node-sdk";
 import config from "./config";
 
 export const complete = () => {
@@ -29,7 +30,10 @@ export const errorDeleting = (err: Error) => {
   logger.warn("Error when deleting files", err);
 };
 
-export const errorPangea = (summary: String, err: String) => {
+export const errorPangea = (
+  summary: string,
+  err: readonly PangeaErrors.ErrorField[]
+) => {
   logger.error("Error", summary, err);
 };
 
@@ -134,6 +138,6 @@ export const errorOutputOptionsParse = (err: any) => {
   );
 };
 
-export const threatVerdict  = (verdict: string) => {
+export const threatVerdict = (verdict: string) => {
   logger.log(`File threat verdict '${verdict}'`);
 };

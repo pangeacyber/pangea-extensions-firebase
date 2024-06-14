@@ -26,15 +26,12 @@ import * as crypto from "crypto";
 import config, { deleteImage } from "./config";
 import * as logs from "./logs";
 import { startsWithArray } from "./util";
-import {
-  IsolateFileResult,
-  isolateFile,
-} from "./isolate-file";
+import { IsolateFileResult, isolateFile } from "./isolate-file";
 
-import { PangeaConfig, PangeaResponse, FileIntelService, PangeaErrors } from "pangea-node-sdk";
+import { PangeaConfig, FileIntelService, PangeaErrors } from "pangea-node-sdk";
 
 const pangeaConfig = new PangeaConfig({ domain: config.pangeaDomain });
-const fileIntel = new FileIntelService(config.pangeaToken, pangeaConfig);
+const fileIntel = new FileIntelService(config.pangeaToken!, pangeaConfig);
 
 enum threatVerdict {
   unknown = "unknown",
@@ -65,7 +62,7 @@ export const checkFileReputation = functions.storage
     // This is the file MIME type
     const { contentType } = object;
     // Absolute path to dirname
-    const tmpFilePath = path.resolve("/", path.dirname(object.name));
+    const tmpFilePath = path.resolve("/", path.dirname(object.name!));
 
     if (
       config.includePathList &&
@@ -90,7 +87,7 @@ export const checkFileReputation = functions.storage
 
     const bucket = admin.storage().bucket(object.bucket);
     // File path in the bucket.
-    const filePath = object.name;
+    const filePath = object.name!;
     const parsedPath = path.parse(filePath);
     const objectMetadata = object;
 
@@ -117,37 +114,48 @@ export const checkFileReputation = functions.storage
 
       // Generate file hash
       const fileBuffer = fs.readFileSync(originalFile);
-      const hashSum = crypto.createHash('sha256');
+      const hashSum = crypto.createHash("sha256");
       hashSum.update(fileBuffer);
-      const fileHash = hashSum.digest('hex');
+      const fileHash = hashSum.digest("hex");
 
       // Look up the file using the Pangea File Intel service
       const options = { provider: "reversinglabs", verbose: true, raw: true };
       try {
-        const response = await fileIntel.lookup(
-          fileHash,
-          "sha256",
-          options
-        );
+        const response = await fileIntel.lookup(fileHash, "sha256", options);
 
         if (response.success) {
           logs.threatVerdict(response.result.data.verdict);
 
-        // Ignore the file if it is not known to be a threat
-        if (response.result.data.verdict === threatVerdict.unknown)
-          return;
+          // Ignore the file if it is not known to be a threat
+          if (response.result.data.verdict === threatVerdict.unknown) return;
 
-        // Record the file's metadata in the Firebase Storage
-        isMalicious = true;
-        objectMetadata.metadata.threatCategory = response.result.data.category;
-        objectMetadata.metadata.threatScore = response.result.data.score;
-        objectMetadata.metadata.threatVerdict = response.result.data.verdict;
-        objectMetadata.metadata.threatProvider =  response.result.parameters.provider;
-        objectMetadata.metadata.fileHashType =  response.result.parameters.hash_type;
-        objectMetadata.metadata.fileHash =  response.result.parameters.hash;
+          // Record the file's metadata in the Firebase Storage
+          isMalicious = true;
+          if (!objectMetadata.metadata) {
+            objectMetadata.metadata = {};
+          }
 
-        // Neaturalize the file
-        isolateResult = await isolateFile({
+          // @ts-expect-error
+          objectMetadata.metadata.threatCategory =
+            response.result.data.category;
+
+          // @ts-expect-error
+          objectMetadata.metadata.threatScore = response.result.data.score;
+          objectMetadata.metadata.threatVerdict = response.result.data.verdict;
+
+          // @ts-expect-error
+          objectMetadata.metadata.threatProvider =
+            response.result.parameter!.provider;
+
+          // @ts-expect-error
+          objectMetadata.metadata.fileHashType =
+            response.result.parameter!.hash_type;
+
+          // @ts-expect-error
+          objectMetadata.metadata.fileHash = response.result.parameter!.hash;
+
+          // Neaturalize the file
+          isolateResult = await isolateFile({
             bucket,
             originalFile,
             parsedPath,
@@ -156,9 +164,9 @@ export const checkFileReputation = functions.storage
         }
       } catch (e) {
         if (e instanceof PangeaErrors.APIError) {
-          logs.errorPangea(e.summary, e.errors)
+          logs.errorPangea(e.summary, e.errors);
         } else {
-          logs.error(e);
+          logs.error(e as Error);
         }
       }
 
@@ -168,20 +176,22 @@ export const checkFileReputation = functions.storage
           subject: filePath,
           data: {
             input: object,
-            output: isolateResult,
+            output: isolateResult!,
           },
         }));
 
       eventChannel &&
-      (await eventChannel.publish({
-        type: "firebase.extensions.twilio.send.sms",
-        data: {
-          to: config.externalNotification,
-          body: `Pangea detected a malicious file upload to '${filePath}' and was neutralized to path '${isolateResult.outputFilePath}'.`,
-        },
-      }));
+        (await eventChannel.publish({
+          type: "firebase.extensions.twilio.send.sms",
+          data: {
+            to: config.externalNotification,
+            body: `Pangea detected a malicious file upload to '${filePath}' and was neutralized to path '${
+              isolateResult!.outputFilePath
+            }'.`,
+          },
+        }));
 
-      if (isolateResult.success === false) {
+      if (!isolateResult!.success) {
         logs.failed();
         return;
       } else {
@@ -192,14 +202,14 @@ export const checkFileReputation = functions.storage
               await remoteFile.delete();
               logs.remoteFileDeleted(filePath);
             } catch (err) {
-              logs.errorDeleting(err);
+              logs.errorDeleting(err as Error);
             }
           }
         }
         logs.complete();
       }
     } catch (err) {
-      logs.error(err);
+      logs.error(err as Error);
     } finally {
       if (originalFile) {
         logs.tempOriginalFileDeleting(filePath);
@@ -214,7 +224,7 @@ export const checkFileReputation = functions.storage
             await remoteFile.delete();
             logs.remoteFileDeleted(filePath);
           } catch (err) {
-            logs.errorDeleting(err);
+            logs.errorDeleting(err as Error);
           }
         }
       }

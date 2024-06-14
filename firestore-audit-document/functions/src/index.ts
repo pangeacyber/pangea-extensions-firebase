@@ -16,29 +16,35 @@
 
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
-import { PangeaConfig, AuditService } from "pangea-node-sdk"
+import { PangeaConfig, AuditService, Audit } from "pangea-node-sdk";
 
 import config from "./config";
-import strings from './strings';
+import strings from "./strings";
 import { evaluateChange } from "./utils";
 
 // Instantiate a Pangea Configuration object with the end point domain
 const serviceConfig = new PangeaConfig({ domain: config.pangeaDomain });
 
 // Instantiate the domainIntel Service using the auth token and config
-const pangeaService = new AuditService(config.pangeaServiceToken, serviceConfig);
+const pangeaService = new AuditService(
+  config.pangeaServiceToken!,
+  serviceConfig
+);
 
 // Initialize the Firebase Admin SDK
 admin.initializeApp();
 
 functions.logger.log(strings.init, config);
 
-export const firestore_doc_audit = functions.firestore.document(config.collectionPath).onWrite(
-  async (change, context): Promise<void> => {
+export const firestore_doc_audit = functions.firestore
+  .document(config.collectionPath!)
+  .onWrite(async (change, context): Promise<void> => {
     functions.logger.log(strings.start, config);
 
     const { fieldsToAudit } = config;
-    const fields = (fieldsToAudit?.split(",").map((field) => field.trim()) || []).sort();
+    const fields = (
+      fieldsToAudit?.split(",").map((field) => field.trim()) || []
+    ).sort();
 
     try {
       const changeDetails = evaluateChange(change, fields);
@@ -52,13 +58,12 @@ export const firestore_doc_audit = functions.firestore.document(config.collectio
     } finally {
       functions.logger.log(strings.complete);
     }
-  }
-);
+  });
 
-const callService = async (value: string) => {
+const callService = async (value: Audit.Event) => {
   // Call the service
   functions.logger.log(strings.serviceCallStart, value);
   const { result } = await pangeaService.log(value);
   functions.logger.log(strings.serviceCallComplete, result);
   return result;
-}
+};
