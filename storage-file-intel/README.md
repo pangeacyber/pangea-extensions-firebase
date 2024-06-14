@@ -42,15 +42,15 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
 
 - You will be charged a small amount (typically around $0.01/month) for the Firebase resources required by this extension (even if it is not used).
 - This extension uses other Firebase and Google Cloud Platform services, which have associated charges if you exceed the service’s no-cost tier:
- - Cloud Storage
- - Cloud Functions (Node.js 10+ runtime. [See FAQs](https://firebase.google.com/support/faq#extensions-pricing))
+- Cloud Storage
+- Cloud Functions (Node.js 18+ runtime. [See FAQs](https://firebase.google.com/support/faq#extensions-pricing))
 - If you enable events [Eventarc fees apply](https://cloud.google.com/eventarc/pricing).
 
 To install an extension, your project must be on the [Blaze (pay as you go) plan](https://firebase.google.com/pricing)
 
 - You will be charged a small amount (typically around $0.01/month) for the Firebase resources required by this extension (even if it is not used).
 - This extension uses other Firebase and Google Cloud Platform services, which have associated charges if you exceed the service’s no-cost tier:
-  - Cloud Functions (Node.js 10+ runtime. See [FAQs](https://firebase.google.com/support/faq#expandable-24))
+  - Cloud Functions (Node.js 18+ runtime. See [FAQs](https://firebase.google.com/support/faq#expandable-24))
 
 Usage of this extension also requires you to have a [Pangea](https://pangea.cloud/signup?utm_medium=google-marketplace&utm_source=marketplace&utm_campaign=firebase-extension-file-intel) account. You are responsible for any associated costs with your usage of Pangea.
 
@@ -89,6 +89,9 @@ If you prefer to monitor every file uploaded to your Storage bucket, leave this 
 
 
 * Cloud Function memory: Memory of the function responsible of zipping files. Choose how much memory to give to the function that zips files. (For large files we recommend using a minimum of 2GB).
+
+* SMS Notification Phone Number: An E.164 formatted phone number to send SMS notifications to when a file is deemed malicious. This requires that the Twilio Send Message Extension is installed and that this the 'firebase.extensions.twilio.send.sms' event is enabled below.
+
 
 
 

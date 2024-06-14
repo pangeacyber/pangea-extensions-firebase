@@ -16,7 +16,7 @@
 
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
-import {PangeaConfig, RedactService} from "pangea-node-sdk"
+import { PangeaConfig, RedactService } from "pangea-node-sdk";
 
 import config from "./config";
 import * as logs from "./logs";
@@ -32,19 +32,20 @@ enum ChangeType {
 const redactConfig = new PangeaConfig({ domain: config.pangeaDomain });
 
 // Instantiate the Redact Service using the auth token and config
-const redact = new RedactService(config.redactToken, redactConfig);
+const redact = new RedactService(config.redactToken!, redactConfig);
 
 // Initialize the Firebase Admin SDK
 admin.initializeApp();
 
 logs.init(config);
 
-export const fsredact = functions.firestore.document(config.collectionPath).onWrite(
-  async (change): Promise<void> => {
+export const fsredact = functions.firestore
+  .document(config.collectionPath!)
+  .onWrite(async (change): Promise<void> => {
     logs.start(config);
     const { inputFieldName, outputFieldName } = config;
 
-    if (validators.fieldNamesMatch(inputFieldName, outputFieldName)) {
+    if (validators.fieldNamesMatch(inputFieldName!, outputFieldName!)) {
       logs.fieldNamesNotDifferent();
       return;
     }
@@ -66,13 +67,12 @@ export const fsredact = functions.firestore.document(config.collectionPath).onWr
 
       logs.complete();
     } catch (err) {
-      logs.error(err);
+      logs.error(err as Error);
     }
-  }
-);
+  });
 
 const extractInput = (snapshot: admin.firestore.DocumentSnapshot): any => {
-  return snapshot.get(config.inputFieldName);
+  return snapshot.get(config.inputFieldName!);
 };
 
 const getChangeType = (
@@ -138,12 +138,10 @@ const redactSingle = async (
   logs.redactSingleString(input);
 
   try {
-
     const redaction = await redactString(input);
     return updateRedaction(snapshot, redaction);
-
   } catch (err) {
-    logs.redactSingleStringError(input, err);
+    logs.redactSingleStringError(input, err as Error);
     throw err;
   }
 };
@@ -152,26 +150,23 @@ const redactMultiple = async (
   input: object,
   snapshot: admin.firestore.DocumentSnapshot
 ): Promise<void> => {
-  let translations = {};
-  let promises = [];
+  let translations: Record<string, string | null> = {};
+  let promises: (() => Promise<unknown>)[] = [];
 
   logs.redactMultipleStrings(input);
 
   Object.entries(input).forEach(([input, value]) => {
-      promises.push(
-        () =>
-          new Promise<void>(async (resolve) => {
+    promises.push(
+      () =>
+        new Promise<void>(async (resolve) => {
+          const output =
+            typeof value === "string" ? await redactString(value) : null;
 
-            const output =
-              typeof value === "string"
-                ? await redactString(value)
-                : null;
+          translations[input] = output;
 
-            translations[input] = output;
-
-            return resolve();
-          })
-      );
+          return resolve();
+        })
+    );
   });
 
   for (const fn of promises) {
@@ -195,22 +190,24 @@ const redactDocument = async (
   await redactSingle(input, snapshot);
 };
 
-const redactString = async (
-  string: string
-): Promise<string> => {
+const redactString = async (string: string): Promise<string | null> => {
   try {
     logs.redactInputString(string);
 
     const response = await redact.redact(string);
-    if(response.success) {
-      var redactedString = response.result.redacted_text
+    const redactedString =
+      response.success && response.result.redacted_text
+        ? response.result.redacted_text
+        : null;
+    if (!redactedString) {
+      return null;
     }
 
     logs.redactStringComplete(redactedString);
 
     return redactedString;
   } catch (err) {
-    logs.redactStringError(string, err);
+    logs.redactStringError(string, err as Error);
     throw err;
   }
 };
@@ -223,7 +220,7 @@ const updateRedaction = async (
 
   // Wrapping in transaction to allow for automatic retries (#48)
   await admin.firestore().runTransaction((transaction) => {
-    transaction.update(snapshot.ref, config.outputFieldName, translations);
+    transaction.update(snapshot.ref, config.outputFieldName!, translations);
     return Promise.resolve();
   });
 

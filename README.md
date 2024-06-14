@@ -10,4 +10,4 @@ When you find an extension that solves a need for your app or project, all you d
 
 Documentation and tutorials for [Pangea Firebase Extensions](https://pangea.cloud/docs/tutorials/firebase/)
 
-Documentation for the [Fire base Extensions](https://firebase.google.com/docs/extensions) framework.
+Documentation for the [Firebase Extensions](https://firebase.google.com/docs/extensions) framework.

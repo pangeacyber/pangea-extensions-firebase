@@ -17,7 +17,7 @@
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
 import * as functionsV2 from "firebase-functions/v2";
-import { PangeaConfig, AuditService } from "pangea-node-sdk"
+import { PangeaConfig, AuditService } from "pangea-node-sdk";
 
 import config from "./config";
 import * as logs from "./logs";
@@ -33,19 +33,20 @@ enum ChangeType {
 const auditConfig = new PangeaConfig({ domain: config.pangeaDomain });
 
 // Instantiate the Audit Service using the auth token and config
-const audit = new AuditService(config.auditToken, auditConfig);
+const audit = new AuditService(config.auditToken!, auditConfig);
 
 // Initialize the Firebase Admin SDK
 admin.initializeApp();
 
 logs.init(config);
 
-export const fslog = functions.firestore.document(config.collectionPath).onWrite(
-  async (change): Promise<void> => {
+export const fslog = functions.firestore
+  .document(config.collectionPath!)
+  .onWrite(async (change): Promise<void> => {
     logs.start(config);
     const { inputFieldName, outputFieldName } = config;
 
-    if (validators.fieldNamesMatch(inputFieldName, outputFieldName)) {
+    if (validators.fieldNamesMatch(inputFieldName!, outputFieldName!)) {
       logs.fieldNamesNotDifferent();
       return;
     }
@@ -67,13 +68,12 @@ export const fslog = functions.firestore.document(config.collectionPath).onWrite
 
       logs.complete();
     } catch (err) {
-      logs.error(err);
+      logs.error(err as Error);
     }
-  }
-);
+  });
 
 const extractInput = (snapshot: admin.firestore.DocumentSnapshot): any => {
-  return snapshot.get(config.inputFieldName);
+  return snapshot.get(config.inputFieldName!);
 };
 
 const getChangeType = (
@@ -142,12 +142,12 @@ const logSingle = async (
       typeof input === "object"
         ? await logObject(input)
         : typeof input === "string"
-          ? await logObject({ message: input })
-          : null;
-          
+        ? await logObject({ message: input })
+        : null;
+
     return updateResponse(snapshot, response);
   } catch (err) {
-    logs.auditSingleStringError(input, err);
+    logs.auditSingleStringError(input, err as Error);
     throw err;
   }
 };
@@ -156,8 +156,8 @@ const logMultiple = async (
   input: object,
   snapshot: admin.firestore.DocumentSnapshot
 ): Promise<void> => {
-  let responses = {};
-  let promises = [];
+  let responses: Record<string, unknown> = {};
+  let promises: (() => Promise<unknown>)[] = [];
 
   logs.auditMultipleStrings(input);
 
@@ -165,13 +165,12 @@ const logMultiple = async (
     promises.push(
       () =>
         new Promise<void>(async (resolve) => {
-
           const output =
             typeof input === "object"
               ? await logObject(value)
               : typeof input === "string"
-                ? await logObject({ message: value })
-                : null;
+              ? await logObject({ message: value })
+              : null;
 
           responses[index] = output;
           return resolve();
@@ -200,18 +199,17 @@ const logDocument = async (
   }
 };
 
-const logObject = async (
-  input: object,
-): Promise<any> => {
+const logObject = async (input: object): Promise<any> => {
   try {
     logs.auditInputString(JSON.stringify(input));
 
+    // @ts-expect-error
     const response = await audit.log(input);
-    logs.auditStringComplete(response.result);
+    logs.auditStringComplete(JSON.stringify(response.result));
 
     return response.result;
   } catch (err) {
-    logs.auditStringError(JSON.stringify(input), err);
+    logs.auditStringError(JSON.stringify(input), err as Error);
     return Promise.reject(err);
   }
 };
@@ -224,20 +222,19 @@ const updateResponse = async (
 
   // Wrapping in transaction to allow for automatic retries (#48)
   await admin.firestore().runTransaction((transaction) => {
-    transaction.update(snapshot.ref, config.outputFieldName, responses);
+    transaction.update(snapshot.ref, config.outputFieldName!, responses);
     return Promise.resolve();
   });
 
   logs.updateDocumentComplete(snapshot.ref.path);
 };
 
-export const onusercreated = functions.auth.user().onCreate((
-  async (user): Promise<void> => {
+export const onusercreated = functions.auth
+  .user()
+  .onCreate(async (user): Promise<void> => {
     try {
-      const displayName = user.displayName ||
-        user.email ||
-        user.phoneNumber ||
-        user.uid;
+      const displayName =
+        user.displayName || user.email || user.phoneNumber || user.uid;
 
       return await logObject({
         message: `User '${displayName}' created.`,
@@ -250,16 +247,14 @@ export const onusercreated = functions.auth.user().onCreate((
     } catch (err) {
       return Promise.reject(err);
     }
-  })
-);
+  });
 
-export const onuserdeleted = functions.auth.user().onDelete((
-  async (user): Promise<void> => {
+export const onuserdeleted = functions.auth
+  .user()
+  .onDelete(async (user): Promise<void> => {
     try {
-      const displayName = user.displayName ||
-        user.email ||
-        user.phoneNumber ||
-        user.uid;
+      const displayName =
+        user.displayName || user.email || user.phoneNumber || user.uid;
 
       return await logObject({
         message: `User '${displayName}' deleted.`,
@@ -272,25 +267,26 @@ export const onuserdeleted = functions.auth.user().onDelete((
     } catch (err) {
       return Promise.reject(err);
     }
-  })
-);
-
-export const onmaliciousfiledetected = functionsV2.eventarc.onCustomEventPublished(
-  "firebase.extensions.pangea-file-intel.v1.complete",
-  async (event) => {
-    try {
-      return await logObject({
-        message: `Malicious file '${event.subject}' neutralized to path '${event.data.output.outputFilePath}'.`,
-        actor: event.source,
-        action: "Naturalized",
-        target: event.data.output.outputFilePath,
-        source: event.subject,
-        status: event.data.input.metadata.threatVerdict
-      });
-    } catch (err) {
-      return Promise.reject(err);
-    }
   });
+
+export const onmaliciousfiledetected =
+  functionsV2.eventarc.onCustomEventPublished(
+    "firebase.extensions.pangea-file-intel.v1.complete",
+    async (event) => {
+      try {
+        return await logObject({
+          message: `Malicious file '${event.subject}' neutralized to path '${event.data.output.outputFilePath}'.`,
+          actor: event.source,
+          action: "Naturalized",
+          target: event.data.output.outputFilePath,
+          source: event.subject,
+          status: event.data.input.metadata.threatVerdict,
+        });
+      } catch (err) {
+        return Promise.reject(err);
+      }
+    }
+  );
 
 export const onlogevent = functionsV2.eventarc.onCustomEventPublished(
   "firebase.extensions.pangea-audit-log.v1.log",

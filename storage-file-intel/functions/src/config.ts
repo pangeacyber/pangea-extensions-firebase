@@ -20,7 +20,7 @@ export enum deleteImage {
   onSuccess,
 }
 
-function deleteOriginalFile(deleteType) {
+function deleteOriginalFile(deleteType?: string) {
   switch (deleteType) {
     case "true":
       return deleteImage.always;
@@ -31,7 +31,7 @@ function deleteOriginalFile(deleteType) {
   }
 }
 
-function paramToArray(param) {
+function paramToArray(param: unknown) {
   return typeof param === "string" ? param.split(",") : undefined;
 }
 
@@ -44,5 +44,5 @@ export default {
   excludePathList: paramToArray(process.env.EXCLUDE_PATH_LIST),
   pangeaDomain: process.env.PANGEA_DOMAIN,
   pangeaToken: process.env.PANGEA_FILE_INTEL_TOKEN,
-  externalNotification: process.env.EXTERNAL_NOTIFICATION_PARAMETER
+  externalNotification: process.env.EXTERNAL_NOTIFICATION_PARAMETER,
 };

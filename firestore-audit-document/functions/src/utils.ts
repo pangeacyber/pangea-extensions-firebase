@@ -15,84 +15,94 @@
  */
 
 import * as functions from "firebase-functions";
-import * as admin from "firebase-admin";
-import { FieldValue } from "firebase-admin/firestore";
-import { firestore } from "firebase-admin";
-
-import strings from './strings';
 
 export type ChangeDetails = {
-    hasChanged: boolean;
-    documentId: string;
-    value?: any;
+  hasChanged: boolean;
+  documentId: string;
+  value: {
+    action?: string;
+    message: string;
+    new?: Record<string, unknown>;
+    old?: Record<string, unknown>;
+    source: string;
+    status: string;
+    target: string;
+  };
 };
 
 // Evaluate the changes in the Firestore document
-export const evaluateChange = (change: functions.Change<functions.firestore.DocumentSnapshot>, fields: Array<string>): ChangeDetails => {
-    const changeDetails: ChangeDetails = {
-        hasChanged: false,
-        documentId: change?.after?.id || change?.before?.id,
-        value: {
-            source: "Firebase client",
-            target: "Firestore",
-            status: "Completed",
-        }
-    };
+export const evaluateChange = (
+  change: functions.Change<functions.firestore.DocumentSnapshot>,
+  fields: Array<string>
+): ChangeDetails => {
+  const changeDetails: ChangeDetails = {
+    hasChanged: false,
+    documentId: change?.after?.id || change?.before?.id,
+    value: {
+      source: "Firebase client",
+      target: "Firestore",
+      status: "Completed",
+      message: "", // Filled in later.
+    },
+  };
 
-    // Document is deleted
-    if (!change?.after?.exists) {
-        changeDetails.value.action = "Delete";
+  // Document is deleted
+  if (!change?.after?.exists) {
+    changeDetails.value.action = "Delete";
+  }
+  // Document created
+  else if (!change?.before?.exists) {
+    changeDetails.value.action = "Create";
+  }
+  // Document updated
+  else {
+    changeDetails.value.action = "Update";
+  }
+
+  // Get the values we are interested in
+  const before = getValues(change?.before?.data(), fields) ?? {};
+  const after = getValues(change?.after?.data(), fields) ?? {};
+
+  // Add all the keys from the old and new objects to a set
+  const allFields = new Set([...Object.keys(before), ...Object.keys(after)]);
+
+  // Check if the values are different in the old and new objects
+  allFields.forEach((field) => {
+    // If the field is changed then set the hasChanged flag to true and keep the field in the object
+    if (JSON.stringify(before[field]) !== JSON.stringify(after[field])) {
+      changeDetails.hasChanged = true;
     }
-    // Document created
-    else if (!change?.before?.exists) {
-        changeDetails.value.action = "Create";
-    }
-    // Document updated
+    // If the field is not changed then remove it from the object
     else {
-        changeDetails.value.action = "Update";
-    };
-
-    // Get the values we are interested in
-    const before = getValues(change?.before?.data(), fields) ?? {};
-    const after = getValues(change?.after?.data(), fields) ?? {};
-
-    // Add all the keys from the old and new objects to a set
-    const allFields = new Set([...Object.keys(before), ...Object.keys(after)]);
-
-    // Check if the values are different in the old and new objects
-    allFields.forEach((field) => {
-        // If the field is changed then set the hasChanged flag to true and keep the field in the object
-        if (JSON.stringify(before[field]) !== JSON.stringify(after[field])) {
-            changeDetails.hasChanged = true;
-        }
-        // If the field is not changed then remove it from the object
-        else {
-            delete before[field];
-            delete after[field];
-        }
-    });
-
-    changeDetails.value = {...changeDetails.value,
-        message: `${changeDetails.value.action} document id: ${changeDetails.documentId}`,
-        old: before,
-        new: after,
+      delete before[field];
+      delete after[field];
     }
+  });
 
-    return changeDetails;
-}
+  changeDetails.value = {
+    ...changeDetails.value,
+    message: `${changeDetails.value.action} document id: ${changeDetails.documentId}`,
+    old: before,
+    new: after,
+  };
 
+  return changeDetails;
+};
 
 // getValues
 //
 // Returns the relevant fields from the data object
 //
-const getValues = (data: any, fields: Array<string>): any => {
-    if (!data || !fields) return null;
+const getValues = (
+  data: any,
+  fields: readonly string[]
+): Record<string, unknown> | null => {
+  if (!data || !fields) return null;
 
-    return Object.keys(data).reduce((acc, key) => {
-        if (fields.length === 0 || fields.includes(key)) {
-            acc[key] = data[key];
-        }
-        return acc;
-    }, {});
-}
+  return Object.keys(data).reduce<Record<string, unknown>>((acc, key) => {
+    if (fields.length === 0 || fields.includes(key)) {
+      acc[key] = data[key];
+    }
+    return acc;
+  }, {});
+};

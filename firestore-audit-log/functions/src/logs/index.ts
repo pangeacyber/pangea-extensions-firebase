@@ -57,7 +57,7 @@ export const fieldNamesNotDifferent = () => {
   logger.error(messages.fieldNamesNotDifferent());
 };
 
-export const init = (config) => {
+export const init = (config: {}) => {
   logger.log(...messages.init(config));
 };
 
@@ -65,7 +65,7 @@ export const inputFieldNameIsOutputPath = () => {
   logger.error(messages.inputFieldNameIsOutputPath());
 };
 
-export const start = (config) => {
+export const start = (config: {}) => {
   logger.log(...messages.start(config));
 };
 
@@ -77,31 +77,21 @@ export const auditStringComplete = (string: string) => {
   logger.log(messages.auditStringComplete(string));
 };
 
-export const auditStringError = (
-  string: string,
-  err: Error
-) => {
+export const auditStringError = (string: string, err: Error) => {
   logger.error(...messages.auditStringError(string, err));
 };
-export const auditSingleString = (
-  string: string
-) => {
+export const auditSingleString = (string: string) => {
   logger.log(messages.auditSingleString(string));
 };
 export const auditSingleStringComplete = (string: string) => {
   logger.log(messages.auditSingleStringComplete(string));
 };
 
-export const auditSingleStringError = (
-  string: string,
-  err: Error
-) => {
+export const auditSingleStringError = (string: string, err: Error) => {
   logger.error(...messages.auditSingleStringError(string, err));
 };
 
-export const auditMultipleStrings = (
-  input: object
-) => {
+export const auditMultipleStrings = (input: object) => {
   logger.log(messages.auditMultipleStrings(input));
 };
 export const auditMultipleStringsComplete = (input: object) => {

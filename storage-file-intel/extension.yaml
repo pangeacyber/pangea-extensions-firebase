@@ -17,8 +17,7 @@ version: 0.1.40
 specVersion: v1beta
 
 displayName: Known Malware Detection
-description:
-  Checks files uploaded to Cloud Storage for known malicious behavior, isolates the file in a gzip formatted container if deemed malicious, and optionally keeps or deletes the original file.
+description: Checks files uploaded to Cloud Storage for known malicious behavior, isolates the file in a gzip formatted container if deemed malicious, and optionally keeps or deletes the original file.
 
 license: Apache-2.0
 
@@ -56,7 +55,7 @@ resources:
       and isolates the file in gzip formatted container if it is deemed . Optionally keeps or deletes the original file.
     properties:
       location: ${param:LOCATION}
-      runtime: nodejs14
+      runtime: nodejs18
       timeout: 540s
       availableMemoryMb: ${param:FUNCTION_MEMORY}
       eventTrigger:
@@ -145,7 +144,7 @@ params:
       Used to authenticate access to Pangea services.
     type: secret
     example: pts_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-#    default:
+    # default:
     validationRegex: "^pts_[a-z2-7]{32}$"
     validationErrorMessage: Must be a valid Pangea Auth Token
     required: true
@@ -175,8 +174,7 @@ params:
     example: "/malicious"
     default: "/malicious"
     validationRegex: ^(\/[^\s\/\,]+)+(\,(\/[^\s\/\,]+)+)*$
-    validationErrorMessage:
-      Invalid paths, must be a comma-separated list of absolute path values.
+    validationErrorMessage: Invalid paths, must be a comma-separated list of absolute path values.
     required: false
 
   - param: ZIP_PASSWORD
@@ -188,9 +186,9 @@ params:
     type: secret
     example: "Passw0rd!"
     default: ""
-#      validationRegex: ^(\/[^\s\/\,]+)+(\,(\/[^\s\/\,]+)+)*$
-#      validationErrorMessage:
-#        Invalid paths, must be a comma-separated list of absolute path values.
+    # validationRegex: ^(\/[^\s\/\,]+)+(\,(\/[^\s\/\,]+)+)*$
+    # validationErrorMessage:
+    #   Invalid paths, must be a comma-separated list of absolute path values.
     required: false
 
   - param: DELETE_ORIGINAL_FILE
@@ -222,8 +220,7 @@ params:
     type: string
     example: "/users/avatars,/design/pictures"
     validationRegex: ^(\/[^\s\/\,]+)+(\,(\/[^\s\/\,]+)+)*$
-    validationErrorMessage:
-      Invalid paths, must be a comma-separated list of absolute path values.
+    validationErrorMessage: Invalid paths, must be a comma-separated list of absolute path values.
     required: false
 
   - param: EXCLUDE_PATH_LIST
@@ -241,8 +238,7 @@ params:
     type: string
     example: "/users/avatars/thumbs,/design/pictures/thumbs"
     validationRegex: ^(\/[^\s\/\,]+)+(\,(\/[^\s\/\,]+)+)*$
-    validationErrorMessage:
-      Invalid paths, must be a comma-separated list of absolute path values.
+    validationErrorMessage: Invalid paths, must be a comma-separated list of absolute path values.
     required: false
 
   - param: FUNCTION_MEMORY
@@ -263,14 +259,13 @@ params:
     immutable: false
 
   - param: EXTERNAL_NOTIFICATION_PARAMETER
-    label: SMS Notification Phone Number 
-    description: > 
+    label: SMS Notification Phone Number
+    description: >
       An E.164 formatted phone number to send SMS notifications to when a file is deemed malicious. This requires that the Twilio Send Message Extension is installed and that this the 'firebase.extensions.twilio.send.sms' event is enabled below.
     type: string
     example: "+13055671234"
     validationRegex: ^\+[1-9]\d{1,14}$
-    validationErrorMessage:
-      Invalid phone number, must be an  E.164 formatted number.
+    validationErrorMessage: Invalid phone number, must be an  E.164 formatted number.
     required: false
 
 events:
