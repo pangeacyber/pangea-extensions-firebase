@@ -1,0 +1,21 @@
+{
+  "name": "pangea-extensions-firebase",
+  "version": "0.0.0-development",
+  "private": true,
+  "workspaces": [
+    "firestore-audit-document/functions",
+    "firestore-audit-log/functions",
+    "firestore-redact-text/functions",
+    "storage-file-intel/functions"
+  ],
+  "scripts": {
+    "build": "lerna run build",
+    "clean": "lerna run --parallel clean && lerna clean",
+    "generate-package-locks": "lerna exec -- npm install --save --package-lock-only --no-workspaces",
+    "generate-readmes": "lerna run --parallel generate-readme",
+    "test": "lerna run test"
+  },
+  "devDependencies": {
+    "lerna": "^8.1.3"
+  }
+}
