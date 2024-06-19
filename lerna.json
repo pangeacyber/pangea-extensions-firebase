@@ -1,0 +1,9 @@
+{
+  "packages": [
+    "firestore-audit-document/functions",
+    "firestore-audit-log/functions",
+    "firestore-redact-text/functions",
+    "storage-file-intel/functions"
+  ],
+  "version": "independent"
+}
