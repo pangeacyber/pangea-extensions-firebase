@@ -13,7 +13,7 @@
 # limitations under the License.
 
 name: firestore-audit-document
-version: 0.0.3
+version: 0.1.0
 specVersion: v1beta
 
 displayName: Critical Document Auditing
