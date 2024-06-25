@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
-    "@types/mkdirp": "^1.0.1",
+    "@types/mkdirp": "^1.0.2",
     "firebase-functions-test": "^0.2.3",
     "firebase-tools": "^13.11.2",
     "image-size": "^0.9.3",
