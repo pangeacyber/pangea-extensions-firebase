@@ -20,7 +20,7 @@
     "firebase-functions": "^4.9.0",
     "pangea-node-sdk": "^1.10.0",
     "rimraf": "^5.0.7",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.2"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
