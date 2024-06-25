@@ -43,6 +43,38 @@ jobs:
       - name: Build
         run: npm run build
 
+  # Functions need to be buildable without any dev dependencies and outside of
+  # the context of the npm workspace because this is how Firebase will build
+  # them at publish time.
+  build-release:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        function:
+          - firestore-audit-document
+          - firestore-audit-log
+          - firestore-redact-text
+          - storage-file-intel
+    defaults:
+      run:
+        working-directory: ./${{ matrix.function }}/functions
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.0.2
+        with:
+          node-version: 18
+          cache: npm
+          cache-dependency-path: "**/package-lock.json"
+
+      - name: Install dependencies
+        run: npm ci --omit=dev --no-workspaces
+
+      - name: Build
+        run: npm run build
+
   test:
     runs-on: ubuntu-latest
     steps:
