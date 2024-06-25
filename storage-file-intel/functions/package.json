@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@tsconfig/node18": "^18.2.4",
-    "@types/node": "^18.19.39",
+    "@types/node": "^20.14.8",
     "archiver": "^7.0.1",
     "archiver-zip-encrypted": "^2.0.0",
     "firebase-admin": "^11.11.1",
