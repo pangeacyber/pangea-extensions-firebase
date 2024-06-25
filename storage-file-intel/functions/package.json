@@ -22,7 +22,7 @@
     "firebase-admin": "^11.11.1",
     "firebase-functions": "^4.9.0",
     "mkdirp": "^3.0.1",
-    "pangea-node-sdk": "^1.2.0",
+    "pangea-node-sdk": "^1.10.0",
     "rimraf": "^5.0.7",
     "typescript": "^5.4.5",
     "uuidv4": "^6.2.13"
