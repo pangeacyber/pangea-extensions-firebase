@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
-    "firebase-functions-test": "^0.3.3",
+    "firebase-functions-test": "^3.3.0",
     "firebase-tools": "^13.11.4",
     "image-size": "^0.9.7",
     "image-type": "^4.1.0",
