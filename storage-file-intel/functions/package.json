@@ -19,7 +19,7 @@
     "@types/node": "^18.19.39",
     "archiver": "^7.0.1",
     "archiver-zip-encrypted": "^2.0.0",
-    "firebase-admin": "^11.5.0",
+    "firebase-admin": "^11.11.1",
     "firebase-functions": "^4.9.0",
     "mkdirp": "^3.0.1",
     "pangea-node-sdk": "^1.2.0",
