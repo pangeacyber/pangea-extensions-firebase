@@ -20,14 +20,14 @@ import * as logs from "./logs";
 import * as os from "os";
 import * as path from "path";
 import * as fs from "fs";
-import * as Archiver from "archiver";
-import * as ArchiverEncrypted from "archiver-zip-encrypted";
+import archiver from "archiver";
+import archiverZipEncrypted from "archiver-zip-encrypted";
 if (config.zipPassword !== undefined)
-  Archiver.registerFormat("zip-encrypted", ArchiverEncrypted);
+  archiver.registerFormat("zip-encrypted", archiverZipEncrypted);
 
 import { Bucket } from "@google-cloud/storage";
 import { storage } from "firebase-functions";
-import { uuid } from "uuidv4";
+import { v4 as uuid } from "uuid";
 
 export interface IsolateFileResult {
   outputFilePath: string;
@@ -100,12 +100,12 @@ export const isolateFile = async ({
 
       let archive;
       if (config.zipPassword === undefined) {
-        archive = Archiver("zip", {
-          zlib: { level: 8 },
-        });
+        archive = archiver("zip", { zlib: { level: 8 } });
       } else {
         // create archive and specify method of encryption and password
-        archive = Archiver.create("zip-encrypted", {
+        // @ts-expect-error "zip-encrypted" has been registered as a custom
+        // format.
+        archive = archiver("zip-encrypted", {
           zlib: { level: 8 },
           encryptionMethod: "aes256",
           password: config.zipPassword,
