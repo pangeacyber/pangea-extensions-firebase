@@ -119,9 +119,13 @@ export const checkFileReputation = functions.storage
       const fileHash = hashSum.digest("hex");
 
       // Look up the file using the Pangea File Intel service
-      const options = { provider: "reversinglabs", verbose: true, raw: true };
+      const options = { provider: "reversinglabs" };
       try {
-        const response = await fileIntel.lookup(fileHash, "sha256", options);
+        const response = await fileIntel.hashReputation(
+          fileHash,
+          "sha256",
+          options
+        );
 
         if (response.success) {
           logs.threatVerdict(response.result.data.verdict);
@@ -135,24 +139,16 @@ export const checkFileReputation = functions.storage
             objectMetadata.metadata = {};
           }
 
-          // @ts-expect-error
           objectMetadata.metadata.threatCategory =
-            response.result.data.category;
+            response.result.data.category[0];
 
-          // @ts-expect-error
-          objectMetadata.metadata.threatScore = response.result.data.score;
+          objectMetadata.metadata.threatScore = String(
+            response.result.data.score
+          );
           objectMetadata.metadata.threatVerdict = response.result.data.verdict;
-
-          // @ts-expect-error
-          objectMetadata.metadata.threatProvider =
-            response.result.parameter!.provider;
-
-          // @ts-expect-error
-          objectMetadata.metadata.fileHashType =
-            response.result.parameter!.hash_type;
-
-          // @ts-expect-error
-          objectMetadata.metadata.fileHash = response.result.parameter!.hash;
+          objectMetadata.metadata.threatProvider = options.provider;
+          objectMetadata.metadata.fileHashType = "sha256";
+          objectMetadata.metadata.fileHash = fileHash;
 
           // Neaturalize the file
           isolateResult = await isolateFile({
