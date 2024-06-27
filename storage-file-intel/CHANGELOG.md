@@ -1,3 +1,7 @@
+## Version 0.2.1
+
+Fixed isolation of malicious files.
+
 ## Version 0.2.0
 
 Updated to Node.js v18.
