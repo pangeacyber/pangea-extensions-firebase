@@ -15,6 +15,9 @@
     "generate-readmes": "lerna run --parallel generate-readme",
     "test": "lerna run test"
   },
+  "optionalDependencies": {
+    "@nx/nx-linux-x64-gnu": "^19.4.2"
+  },
   "devDependencies": {
     "lerna": "^8.1.6"
   }
