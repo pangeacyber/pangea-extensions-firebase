@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@tsconfig/node18": "^18.2.4",
-    "@types/node": "^18.19.45",
+    "@types/node": "^18.19.46",
     "firebase-admin": "^12.4.0",
     "firebase-functions": "^5.1.0",
     "pangea-node-sdk": "^1.10.0",
