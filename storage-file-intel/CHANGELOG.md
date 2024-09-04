@@ -1,3 +1,7 @@
+## Version 0.2.2
+
+Update UTM links.
+
 ## Version 0.2.1
 
 Fixed isolation of malicious files.
