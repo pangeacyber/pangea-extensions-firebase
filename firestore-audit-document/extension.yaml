@@ -37,7 +37,7 @@ billingRequired: true
 
 externalServices:
   - name: Pangea
-    PricingUri: https://pangea.cloud/pricing
+    PricingUri: https://pangea.cloud/pricing?utm_medium=marketplace&utm_source=firebase&utm_campaign=firestore-sensitive-document-audit
 
 apis:
   - apiName: run.googleapis.com
@@ -119,7 +119,7 @@ params:
   - param: PANGEA_DOMAIN
     label: Pangea service base domain
     description: >
-      The base domain of where your Pangea Service is deployed. The **Domain** value can be copied from the main dashboard of the [Pangea Console](https://console.pangea.cloud).
+      The base domain of where your Pangea Service is deployed. The **Domain** value can be copied from the main dashboard of the [Pangea Console](https://console.pangea.cloud?utm_medium=marketplace&utm_source=firebase&utm_campaign=firestore-sensitive-document-audit).
     type: select
     options:
       - label: gcp.us.pangea.cloud
@@ -137,7 +137,7 @@ params:
   - param: PANGEA_SERVICE_TOKEN
     label: Pangea Auth Token with access to the Audit Log service
     description: >
-      The Pangea Token to use to authenticate access to the Audit Log service. The **Token** value can be copied from the [Audit Log Dashboard](https://console.pangea.cloud/service/audit/logs) of the Pangea Console.
+      The Pangea Token to use to authenticate access to the Audit Log service. The **Token** value can be copied from the [Audit Log Dashboard](https://console.pangea.cloud/service/audit/logs?utm_medium=marketplace&utm_source=firebase&utm_campaign=firestore-sensitive-document-audit) of the Pangea Console.
     type: secret
     example: pts_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     validationRegex: "^pts_[a-z2-7]{32}$"
