@@ -2,7 +2,7 @@
 
 You can test out this extension right away!
 
-1.  From the Pangea Console [Redact Dashboard](https://console.pangea.cloud/service/redact) enable and configure the Redact Rulesets
+1.  From the Pangea Console [Redact Dashboard][] enable and configure the Redact Rulesets
 
 2.  Go to your [Cloud Firestore Dashboard](https://console.firebase.google.com/project/${param:PROJECT_ID}/firestore/data) in the Firebase console.
 
@@ -14,8 +14,7 @@ You can test out this extension right away!
 
 ### Using the extension
 
-This extension redacts text from the input string(s) based on the ruleset defined. Rulesets can be configured and changed anytime from the Pangea Console [Redact Dashboard](https://console.pangea.cloud/service/redact). If the `${param:INPUT_FIELD_NAME}` field of the document is updated, then the redactions will be automatically updated as well.
-
+This extension redacts text from the input string(s) based on the ruleset defined. Rulesets can be configured and changed anytime from the Pangea Console [Redact Dashboard][]. If the `${param:INPUT_FIELD_NAME}` field of the document is updated, then the redactions will be automatically updated as well.
 
 #### Input field as a string
 
@@ -50,7 +49,7 @@ will result in the following translated output in `${param:OUTPUT_FIELD_NAME}`:
 
   ${param:OUTPUT_FIELD_NAME}: {
     first: "My name is <PERSON>",
-    second: "My phone number is <PHONE_NUMBER>",   
+    second: "My phone number is <PHONE_NUMBER>",
   },
 }
 ```
@@ -58,3 +57,5 @@ will result in the following translated output in `${param:OUTPUT_FIELD_NAME}`:
 ### Monitoring
 
 As a best practice, you can [monitor the activity](https://firebase.google.com/docs/extensions/manage-installed-extensions#monitor) of your installed extension, including checks on its health, usage, and logs.
+
+[Redact Dashboard]: https://console.pangea.cloud/service/redact?utm_medium=marketplace&utm_source=firebase&utm_campaign=firebase-extension-redact

@@ -10,16 +10,15 @@ You can test out this extension right away!
 
 4.  In a few seconds, you'll see a new field called `${param:OUTPUT_FIELD_NAME}` pop up in the same document you just created. It will contain the Secure Audit Log Service response.
 
-5.  Then, from the Pangea Console [Secure Audit Log Viewer](https://console.pangea.cloud/service/audit/logs) view the tamperproof log entry.
+5.  Then, from the Pangea Console [Secure Audit Log Viewer][] view the tamperproof log entry.
 
 ### Using the extension
 
-This extension logs strings written to the `${param:INPUT_FIELD_NAME}` field of a document in the `${param:COLLECTION_PATH}` path using the Pangea Secure Audit Logging service. Tamperproof logs can be viewed anytime from the Pangea Console [Secure Audit Log Viewer](https://console.pangea.cloud/service/audit/logs). If the `${param:INPUT_FIELD_NAME}` field of the document is updated, then the updated string will be automatically logged as a new log entry.
-
+This extension logs strings written to the `${param:INPUT_FIELD_NAME}` field of a document in the `${param:COLLECTION_PATH}` path using the Pangea Secure Audit Logging service. Tamperproof logs can be viewed anytime from the Pangea Console [Secure Audit Log Viewer][]. If the `${param:INPUT_FIELD_NAME}` field of the document is updated, then the updated string will be automatically logged as a new log entry.
 
 #### Input field as a string
 
-Write the string "Login attempt from user Bob" to the field `${param:INPUT_FIELD_NAME}` in `${param:COLLECTION_PATH}` will result in the following output in  `${param:OUTPUT_FIELD_NAME}`:
+Write the string "Login attempt from user Bob" to the field `${param:INPUT_FIELD_NAME}` in `${param:COLLECTION_PATH}` will result in the following output in `${param:OUTPUT_FIELD_NAME}`:
 
 ```js
 {
@@ -59,7 +58,7 @@ will result in the following translated output in `${param:OUTPUT_FIELD_NAME}`:
     second: {
       hash: "68fa2ebdc1db323157f3043fce694eb1e095c273fc4d88e77d726e599f330639",
       signature_verification: "none",
-    },   
+    },
   },
 }
 ```
@@ -67,3 +66,5 @@ will result in the following translated output in `${param:OUTPUT_FIELD_NAME}`:
 ### Monitoring
 
 As a best practice, you can [monitor the activity](https://firebase.google.com/docs/extensions/manage-installed-extensions#monitor) of your installed extension, including checks on its health, usage, and logs.
+
+[Secure Audit Log Viewer]: https://console.pangea.cloud/service/audit/logs?utm_medium=marketplace&utm_source=firebase&utm_campaign=firebase-extension-audit

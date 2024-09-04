@@ -37,7 +37,7 @@ billingRequired: true
 
 externalServices:
   - name: Pangea
-    PricingUri: https://pangea.cloud/pricing
+    PricingUri: https://pangea.cloud/pricing?utm_medium=marketplace&utm_source=firebase&utm_campaign=firebase-extension-file-intel
 
 apis:
   - apiName: storage-component.googleapis.com
@@ -123,7 +123,7 @@ params:
   - param: PANGEA_DOMAIN
     label: Pangea service base domain
     description: >
-      The base domain of where your Pangea Service is deployed. The **Domain** value can be copied from the main dashboard of the [Pangea Console](https://console.pangea.cloud).
+      The base domain of where your Pangea Service is deployed. The **Domain** value can be copied from the main dashboard of the [Pangea Console](https://console.pangea.cloud?utm_medium=marketplace&utm_source=firebase&utm_campaign=firebase-extension-file-intel).
     type: select
     options:
       - label: gcp.us.pangea.cloud

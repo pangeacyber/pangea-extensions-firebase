@@ -8,7 +8,7 @@ You can test out this extension right away!
 
 3.  Create a document that contains some or all of the following fields `${param:FIELDS_TO_AUDIT}`
 
-4.  Navigate to [Pangea Audit Log Console](https://console.pangea.cloud/service/audit/logs) to view the audit log of your document.
+4.  Navigate to [Pangea Audit Log Console][] to view the audit log of your document.
 
 ### Using the extension
 
@@ -17,3 +17,5 @@ Listens to Firestore events for `${param:COLLECTION_PATH}` collection and when a
 ### Monitoring
 
 As a best practice, you can [monitor the activity](https://firebase.google.com/docs/extensions/manage-installed-extensions#monitor) of your installed extension, including checks on its health, usage, and logs.
+
+[Pangea Audit Log Console]: https://console.pangea.cloud/service/audit/logs?utm_medium=marketplace&utm_source=firebase&utm_campaign=firestore-sensitive-document-audit

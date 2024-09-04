@@ -2,11 +2,11 @@ Use this extension to log changes to a Firestore collection. The extension is us
 
 This extension:
 
-- Listens to Firestore events for the specified collection. Every create/update/delete requests to the collection will be logged to Pangea's [Secure Audit Log](https://pangea.cloud/services/audit-log/) service.
+- Listens to Firestore events for the specified collection. Every create/update/delete requests to the collection will be logged to Pangea's [Secure Audit Log][] service.
 
 #### Additional setup
 
-Before installing this extension, make sure that you have signed up for a free [Pangea](https://pangea.cloud/signup?utm_medium=google-marketplace&utm_source=marketplace&utm_campaign=firestore-sensitive-document-audit) account and have [set up a Cloud Firestore database](https://firebase.google.com/docs/firestore/quickstart) in your Firebase project.
+Before installing this extension, make sure that you have signed up for a free [Pangea](https://pangea.cloud/signup?utm_medium=marketplace&utm_source=firebase&utm_campaign=firestore-sensitive-document-audit) account and have [set up a Cloud Firestore database](https://firebase.google.com/docs/firestore/quickstart) in your Firebase project.
 
 #### Billing
 
@@ -18,4 +18,6 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
   - Cloud Firestore
   - Cloud Functions (Node.js 18+ runtime. [See FAQs](https://firebase.google.com/support/faq#extensions-pricing))
 
-Usage of this extension also requires you to have a [Pangea](https://pangea.cloud/signup?utm_medium=google-marketplace&utm_source=marketplace&utm_campaign=firestore-sensitive-document-audit) account. You are responsible for any associated costs with your usage of Pangea.
+Usage of this extension also requires you to have a [Pangea](https://pangea.cloud/signup?utm_medium=marketplace&utm_source=firebase&utm_campaign=firestore-sensitive-document-audit) account. You are responsible for any associated costs with your usage of Pangea.
+
+[Secure Audit Log]: https://pangea.cloud/services/audit-log?utm_medium=marketplace&utm_source=firebase&utm_campaign=firestore-sensitive-document-audit

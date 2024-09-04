@@ -2,10 +2,10 @@ Use this extension to redact sensitive text from strings (based on defined rules
 
 This extension listens to your specified Cloud Firestore collection. If you add a string to a specified field in any document within that collection, this extension:
 
-- Redacts text from the string based on the rulesets configured in the Pangea Console [Redact Dashboard](https://console.pangea.cloud/service/redact); Redacted text is also replaced with predefined tags.
+- Redacts text from the string based on the rulesets configured in the Pangea Console [Redact Dashboard][]; Redacted text is also replaced with predefined tags.
 - Adds the Redacted version(s) of the string to a separate specified field in the same document.
 
-You specify the desired data types to redact such as names, email addresses, phone numbers, social security numbers, crypto keys, medical licenses, or customized your own types. You can find a list of predefined rulesets on the Pangea Console [Redact Dashboard](https://console.pangea.cloud/service/redact).
+You specify the desired data types to redact such as names, email addresses, phone numbers, social security numbers, crypto keys, medical licenses, or customized your own types. You can find a list of predefined rulesets on the Pangea Console [Redact Dashboard][].
 
 If the original non-redacted field of the document is updated, then the redactions will be automatically updated, as well.
 
@@ -28,7 +28,7 @@ admin.firestore().collection("redact").add({
 
 #### Additional setup
 
-Before installing this extension, make sure that you have signed up for a free [Pangea](https://pangea.cloud/signup?utm_medium=google-marketplace&utm_source=marketplace&utm_campaign=firebase-extension-redact) account and have [set up a Cloud Firestore database](https://firebase.google.com/docs/firestore/quickstart) in your Firebase project.
+Before installing this extension, make sure that you have signed up for a free [Pangea](https://pangea.cloud/signup?utm_medium=marketplace&utm_source=firebase&utm_campaign=firebase-extension-redact) account and have [set up a Cloud Firestore database](https://firebase.google.com/docs/firestore/quickstart) in your Firebase project.
 
 #### Billing
 
@@ -40,4 +40,6 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
   - Cloud Firestore
   - Cloud Functions (Node.js 18+ runtime. [See FAQs](https://firebase.google.com/support/faq#extensions-pricing))
 
-Usage of this extension also requires you to have a [Pangea](https://pangea.cloud/signup?utm_medium=google-marketplace&utm_source=marketplace&utm_campaign=firebase-extension-redact) account. You are responsible for any associated costs with your usage of Pangea.
+Usage of this extension also requires you to have a [Pangea](https://pangea.cloud/signup?utm_medium=marketplace&utm_source=firebase&utm_campaign=firebase-extension-redact) account. You are responsible for any associated costs with your usage of Pangea.
+
+[Redact Dashboard]: https://console.pangea.cloud/service/redact?utm_medium=marketplace&utm_source=firebase&utm_campaign=firebase-extension-redact
