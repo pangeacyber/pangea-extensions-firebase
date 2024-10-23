@@ -18,7 +18,7 @@
     "@types/node": "^18.19.57",
     "firebase-admin": "^12.6.0",
     "firebase-functions": "^5.1.1",
-    "pangea-node-sdk": "^1.10.0",
+    "pangea-node-sdk": "^4.1.0",
     "rimraf": "^5.0.10",
     "typescript": "^5.6.3"
   },
