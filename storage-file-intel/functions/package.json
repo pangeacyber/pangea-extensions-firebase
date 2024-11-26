@@ -17,7 +17,7 @@
   "dependencies": {
     "@tsconfig/node18": "^18.2.4",
     "@types/archiver": "^6.0.3",
-    "@types/node": "^18.19.65",
+    "@types/node": "^18.19.66",
     "@types/uuid": "^10.0.0",
     "archiver": "^7.0.1",
     "archiver-zip-encrypted": "^2.0.0",
