@@ -134,7 +134,6 @@ params:
         value: aws.eu.pangea.cloud
     default: gcp.us.pangea.cloud
     required: true
-    immutable: true
 
   - param: PANGEA_REDACT_TOKEN
     label: Pangea Auth Token with access to the Redact service
