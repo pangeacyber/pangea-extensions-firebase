@@ -1,3 +1,7 @@
+## Version 0.2.3
+
+PANGEA_DOMAIN is now mutable.
+
 ## Version 0.2.2
 
 Update UTM links.
