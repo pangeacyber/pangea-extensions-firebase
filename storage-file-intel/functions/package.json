@@ -27,7 +27,7 @@
     "pangea-node-sdk": "^1.10.0",
     "rimraf": "^5.0.10",
     "typescript": "^5.8.2",
-    "uuid": "^10.0.0"
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
