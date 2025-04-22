@@ -15,7 +15,7 @@
  */
 
 import * as admin from "firebase-admin";
-import * as functions from "firebase-functions";
+import * as functions from "firebase-functions/v1";
 import * as functionsV2 from "firebase-functions/v2";
 import { PangeaConfig, AuditService } from "pangea-node-sdk";
 

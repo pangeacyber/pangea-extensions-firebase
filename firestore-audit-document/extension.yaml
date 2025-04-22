@@ -53,7 +53,7 @@ resources:
     description: Listens for changes to documents in the specified Cloud Firestore collection and logs them using Pangea's Secure Audit Log service.
     properties:
       location: ${param:LOCATION}
-      runtime: nodejs18
+      runtime: nodejs20
       eventTrigger:
         eventType: providers/cloud.firestore/eventTypes/document.write
         resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${param:COLLECTION_PATH}/{messageId}

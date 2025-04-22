@@ -26,7 +26,7 @@ if (config.zipPassword !== undefined)
   archiver.registerFormat("zip-encrypted", archiverZipEncrypted);
 
 import { Bucket } from "@google-cloud/storage";
-import { storage } from "firebase-functions";
+import { storage } from "firebase-functions/v1";
 import { v4 as uuid } from "uuid";
 
 export interface IsolateFileResult {
@@ -59,8 +59,8 @@ export const isolateFile = async ({
 
   // Path where the zip file will be uploaded to in Storage.
   const modifiedFilePath = path.normalize(
-    config.ioslationPath
-      ? path.join(fileDir, config.ioslationPath, modifiedFileName)
+    config.isolationPath
+      ? path.join(fileDir, config.isolationPath, modifiedFileName)
       : path.join(fileDir, modifiedFileName)
   );
   let modifiedFile: string;
