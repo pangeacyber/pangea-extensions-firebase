@@ -34,9 +34,10 @@ const pangeaConfig = new PangeaConfig({ domain: config.pangeaDomain });
 const fileIntel = new FileIntelService(config.pangeaToken!, pangeaConfig);
 
 enum threatVerdict {
-  unknown = "unknown",
+  benign = "benign",
   malicious = "malicious",
-  trojan = "trojan",
+  suspicious = "suspicious",
+  unknown = "unknown",
 }
 
 // Initialize the Firebase Admin SDK
@@ -131,7 +132,11 @@ export const checkFileReputation = functions.storage
           logs.threatVerdict(response.result.data.verdict);
 
           // Ignore the file if it is not known to be a threat
-          if (response.result.data.verdict === threatVerdict.unknown) return;
+          if (
+            response.result.data.verdict === threatVerdict.benign ||
+            response.result.data.verdict === threatVerdict.unknown
+          )
+            return;
 
           // Record the file's metadata in the Firebase Storage
           isMalicious = true;
@@ -150,7 +155,7 @@ export const checkFileReputation = functions.storage
           objectMetadata.metadata.fileHashType = "sha256";
           objectMetadata.metadata.fileHash = fileHash;
 
-          // Neaturalize the file
+          // Neutralize the file
           isolateResult = await isolateFile({
             bucket,
             originalFile,
