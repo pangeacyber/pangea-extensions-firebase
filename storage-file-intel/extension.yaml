@@ -13,7 +13,7 @@
 # limitations under the License.
 
 name: storage-file-intel
-version: 0.2.3
+version: 0.3.0
 specVersion: v1beta
 
 displayName: Known Malware Detection

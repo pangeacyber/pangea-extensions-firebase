@@ -1,3 +1,8 @@
+## Version 0.3.0
+
+- Updated to Node.js v20.
+- Files with a "benign" reputation are no longer isolated.
+
 ## Version 0.2.3
 
 PANGEA_DOMAIN is now mutable.
