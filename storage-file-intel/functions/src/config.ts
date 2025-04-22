@@ -37,7 +37,7 @@ function paramToArray(param: unknown) {
 
 export default {
   bucket: process.env.IMG_BUCKET,
-  ioslationPath: process.env.ISOLATION_PATH,
+  isolationPath: process.env.ISOLATION_PATH,
   zipPassword: process.env.ZIP_PASSWORD,
   deleteOriginalFile: deleteOriginalFile(process.env.DELETE_ORIGINAL_FILE),
   includePathList: paramToArray(process.env.INCLUDE_PATH_LIST),

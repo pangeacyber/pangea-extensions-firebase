@@ -24,7 +24,7 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
 - This extension uses other Firebase and Google Cloud Platform services, which have associated charges if you exceed the service’s no-cost tier:
   - Pangea Secure Audit Service
   - Cloud Firestore
-  - Cloud Functions (Node.js 18+ runtime. [See FAQs](https://firebase.google.com/support/faq#extensions-pricing))
+  - Cloud Functions (Node.js 20+ runtime. [See FAQs](https://firebase.google.com/support/faq#extensions-pricing))
 
 Usage of this extension also requires you to have a [Pangea](https://pangea.cloud/signup?utm_medium=marketplace&utm_source=firebase&utm_campaign=firestore-sensitive-document-audit) account. You are responsible for any associated costs with your usage of Pangea.
 

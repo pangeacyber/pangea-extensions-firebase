@@ -51,11 +51,11 @@ resources:
   - name: checkFileReputation
     type: firebaseextensions.v1beta.function
     description: >-
-      Listens for new files uploaded to your specified Cloud Storage bucket, checks the file's reputation againt a database of 25 millions known malicious files,
-      and isolates the file in gzip formatted container if it is deemed . Optionally keeps or deletes the original file.
+      Listens for new files uploaded to your specified Cloud Storage bucket, checks the file's reputation against a database of 25 millions known malicious files,
+      and isolates the file in gzip formatted container if it is deemed malicious. Optionally keeps or deletes the original file.
     properties:
       location: ${param:LOCATION}
-      runtime: nodejs18
+      runtime: nodejs20
       timeout: 540s
       availableMemoryMb: ${param:FUNCTION_MEMORY}
       eventTrigger:
@@ -205,14 +205,14 @@ params:
     required: true
 
   - param: INCLUDE_PATH_LIST
-    label: Paths that contain files you want to monitor for malious behavior
+    label: Paths that contain files you want to monitor for malicious behavior
     description: >
       Restrict this extension to only check files in specific locations in your Storage bucket by
       supplying a comma-separated list of absolute paths. For example, to only check files
       stored in the `/users/uploads` and `/user/inbox` directories, specify the paths `/users/uploads,/user/inbox`.
 
       You may also use wildcard notation for directories in the path. For example, `/users/*/uploads`
-      would match `/users/user1/uploads/image.png` as well as  `/users/user2/uploads/any/sub/directory/image.png`.
+      would match `/users/user1/uploads/image.png` as well as `/users/user2/uploads/any/sub/directory/image.png`.
 
       If you prefer to monitor every file uploaded to your Storage bucket,
       leave this field empty.
@@ -223,7 +223,7 @@ params:
     required: false
 
   - param: EXCLUDE_PATH_LIST
-    label: List of absolute paths not to monitor for malious behavior
+    label: List of absolute paths not to monitor for malicious behavior
     description: >
       Ensure this extension does *not* check files in _specific locations_ in your Storage bucket by
       supplying a comma-separated list of absolute paths. For example, to *exclude* the files
@@ -264,7 +264,7 @@ params:
     type: string
     example: "+13055671234"
     validationRegex: ^\+[1-9]\d{1,14}$
-    validationErrorMessage: Invalid phone number, must be an  E.164 formatted number.
+    validationErrorMessage: Invalid phone number, must be an E.164 formatted number.
     required: false
 
 events:

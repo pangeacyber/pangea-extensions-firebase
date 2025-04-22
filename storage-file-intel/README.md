@@ -43,14 +43,8 @@ To install an extension, your project must be on the [Blaze (pay as you go) plan
 - You will be charged a small amount (typically around $0.01/month) for the Firebase resources required by this extension (even if it is not used).
 - This extension uses other Firebase and Google Cloud Platform services, which have associated charges if you exceed the service’s no-cost tier:
 - Cloud Storage
-- Cloud Functions (Node.js 18+ runtime. [See FAQs](https://firebase.google.com/support/faq#extensions-pricing))
+- Cloud Functions (Node.js 20+ runtime. [See FAQs](https://firebase.google.com/support/faq#extensions-pricing))
 - If you enable events [Eventarc fees apply](https://cloud.google.com/eventarc/pricing).
-
-To install an extension, your project must be on the [Blaze (pay as you go) plan](https://firebase.google.com/pricing)
-
-- You will be charged a small amount (typically around $0.01/month) for the Firebase resources required by this extension (even if it is not used).
-- This extension uses other Firebase and Google Cloud Platform services, which have associated charges if you exceed the service’s no-cost tier:
-  - Cloud Functions (Node.js 18+ runtime. See [FAQs](https://firebase.google.com/support/faq#expandable-24))
 
 Usage of this extension also requires you to have a [Pangea](https://pangea.cloud/signup?utm_medium=marketplace&utm_source=firebase&utm_campaign=firebase-extension-file-intel) account. You are responsible for any associated costs with your usage of Pangea.
 
@@ -78,12 +72,12 @@ Usage of this extension also requires you to have a [Pangea](https://pangea.clou
 
 * Deletion of original file: Do you want to automatically delete the original file from the Cloud Storage bucket if it deemed malicious? Note that these deletions cannot be undone.
 
-* Paths that contain files you want to monitor for malious behavior: Restrict this extension to only check files in specific locations in your Storage bucket by supplying a comma-separated list of absolute paths. For example, to only check files stored in the `/users/uploads` and `/user/inbox` directories, specify the paths `/users/uploads,/user/inbox`.
-You may also use wildcard notation for directories in the path. For example, `/users/*/uploads` would match `/users/user1/uploads/image.png` as well as  `/users/user2/uploads/any/sub/directory/image.png`.
+* Paths that contain files you want to monitor for malicious behavior: Restrict this extension to only check files in specific locations in your Storage bucket by supplying a comma-separated list of absolute paths. For example, to only check files stored in the `/users/uploads` and `/user/inbox` directories, specify the paths `/users/uploads,/user/inbox`.
+You may also use wildcard notation for directories in the path. For example, `/users/*/uploads` would match `/users/user1/uploads/image.png` as well as `/users/user2/uploads/any/sub/directory/image.png`.
 If you prefer to monitor every file uploaded to your Storage bucket, leave this field empty.
 
 
-* List of absolute paths not to monitor for malious behavior: Ensure this extension does *not* check files in _specific locations_ in your Storage bucket by supplying a comma-separated list of absolute paths. For example, to *exclude* the files stored in the `/users/sandbox` and `/general/items` directories, specify the paths `/users/sandbox,/general/items`.
+* List of absolute paths not to monitor for malicious behavior: Ensure this extension does *not* check files in _specific locations_ in your Storage bucket by supplying a comma-separated list of absolute paths. For example, to *exclude* the files stored in the `/users/sandbox` and `/general/items` directories, specify the paths `/users/sandbox,/general/items`.
 You may also use wildcard notation for directories in the path. For example, `/users/*/pictures` would exclude `/users/user1/pictures/image.png` as well as `/users/user2/pictures/any/sub/directory/image.png`.
 If you prefer to monitor every file uploaded to your Storage bucket, leave this field empty.
 
@@ -97,7 +91,7 @@ If you prefer to monitor every file uploaded to your Storage bucket, leave this 
 
 **Cloud Functions:**
 
-* **checkFileReputation:** Listens for new files uploaded to your specified Cloud Storage bucket, checks the file's reputation againt a database of 25 millions known malicious files, and isolates the file in gzip formatted container if it is deemed . Optionally keeps or deletes the original file.
+* **checkFileReputation:** Listens for new files uploaded to your specified Cloud Storage bucket, checks the file's reputation against a database of 25 millions known malicious files, and isolates the file in gzip formatted container if it is deemed malicious. Optionally keeps or deletes the original file.
 
 
 

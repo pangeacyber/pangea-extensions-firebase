@@ -54,11 +54,11 @@ resources:
     type: firebaseextensions.v1beta.function
     description:
       Listens for writes of new strings to your specified Cloud Firestore collection, records them using the Secure Audit Log service,
-      a hash of each log entry will be recorded on a immutable and tamperproof blockchian which can later be cryptographically verified
+      a hash of each log entry will be recorded on a immutable and tamperproof blockchain which can later be cryptographically verified
       for authenticity
     properties:
       location: ${param:LOCATION}
-      runtime: nodejs18
+      runtime: nodejs20
       eventTrigger:
         eventType: providers/cloud.firestore/eventTypes/document.write
         resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${param:COLLECTION_PATH}/{messageId}
@@ -69,7 +69,7 @@ resources:
     description: Detects and automatically records a Secure Audit Log entry when a new user is created.
     properties:
       location: ${LOCATION}
-      runtime: nodejs18
+      runtime: nodejs20
       eventTrigger:
         eventType: providers/firebase.auth/eventTypes/user.create
         resource: projects/${PROJECT_ID}
@@ -79,7 +79,7 @@ resources:
     description: Detects and automatically records a Secure Audit Log entry when a user is deleted.
     properties:
       location: ${LOCATION}
-      runtime: nodejs18
+      runtime: nodejs20
       eventTrigger:
         eventType: providers/firebase.auth/eventTypes/user.delete
         resource: projects/${PROJECT_ID}
@@ -91,7 +91,7 @@ resources:
     properties:
       location: ${param:LOCATION}
       buildConfig:
-        runtime: nodejs18
+        runtime: nodejs20
       serviceConfig:
         availableMemory: 512M
         timeoutSeconds: 60
@@ -106,7 +106,7 @@ resources:
     properties:
       location: ${param:LOCATION}
       buildConfig:
-        runtime: nodejs18
+        runtime: nodejs20
       serviceConfig:
         availableMemory: 512M
         timeoutSeconds: 60
