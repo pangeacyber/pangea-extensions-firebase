@@ -1,3 +1,7 @@
+## Version 0.3.1
+
+Updated default Pangea domain to AWS US.
+
 ## Version 0.3.0
 
 - Updated to Node.js v20.
