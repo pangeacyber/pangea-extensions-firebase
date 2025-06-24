@@ -186,7 +186,7 @@ params:
         value: aws.us.pangea.cloud
       - label: aws.eu.pangea.cloud
         value: aws.eu.pangea.cloud
-    default: gcp.us.pangea.cloud
+    default: aws.us.pangea.cloud
     required: true
 
   - param: PANGEA_AUDIT_TOKEN
