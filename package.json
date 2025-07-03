@@ -15,6 +15,6 @@
     "@nx/nx-linux-x64-gnu": "^21.2.1"
   },
   "devDependencies": {
-    "lerna": "^8.2.2"
+    "lerna": "^8.2.3"
   }
 }
