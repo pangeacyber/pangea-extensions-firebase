@@ -120,7 +120,7 @@ export const checkFileReputation = functions.storage
       const fileHash = hashSum.digest("hex");
 
       // Look up the file using the Pangea File Intel service
-      const options = { provider: "reversinglabs" };
+      const options = { provider: "reversinglabs" as const };
       try {
         const response = await fileIntel.hashReputation(
           fileHash,
