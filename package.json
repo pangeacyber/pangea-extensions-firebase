@@ -12,7 +12,7 @@
     "test": "lerna run test"
   },
   "optionalDependencies": {
-    "@nx/nx-linux-x64-gnu": "^21.3.7"
+    "@nx/nx-linux-x64-gnu": "^21.3.11"
   },
   "devDependencies": {
     "lerna": "^8.2.3"
