@@ -1,3 +1,8 @@
+## Version 0.3.0
+
+- Added us-west-2 as a domain option.
+- Updated pangea-node-sdk to v5.3.0.
+
 ## Version 0.2.1
 
 Updated default Pangea domain to AWS US.
