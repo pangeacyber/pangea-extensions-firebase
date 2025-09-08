@@ -184,6 +184,8 @@ params:
         value: gcp.eu.pangea.cloud
       - label: aws.us.pangea.cloud
         value: aws.us.pangea.cloud
+      - label: aws.us-west-2.pangea.cloud
+        value: aws.us-west-2.pangea.cloud
       - label: aws.eu.pangea.cloud
         value: aws.eu.pangea.cloud
     default: aws.us.pangea.cloud
