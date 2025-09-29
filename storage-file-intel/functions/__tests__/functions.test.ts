@@ -1,4 +1,5 @@
 import mockedEnv, { type RestoreFn } from "mocked-env";
+import { describe, beforeEach, afterEach, test, expect, vi } from "vitest";
 
 describe("extension", () => {
   let restore: RestoreFn;
@@ -12,8 +13,8 @@ describe("extension", () => {
 
   afterEach(() => restore());
 
-  test("functions are exported", () => {
-    const exportedFunctions = jest.requireActual("../src");
+  test("functions are exported", async () => {
+    const exportedFunctions = await vi.importActual("../src");
     expect(exportedFunctions.checkFileReputation).toBeInstanceOf(Function);
   });
 });
