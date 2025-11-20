@@ -38,7 +38,9 @@ jobs:
           cache-dependency-path: "**/package-lock.json"
 
       - name: Update npm
-        run: npm install -g npm
+        run: |
+          npm install -g npm
+          npm --version
 
       - name: Install dependencies
         run: npm ci
@@ -73,7 +75,9 @@ jobs:
           cache-dependency-path: "**/package-lock.json"
 
       - name: Update npm
-        run: npm install -g npm
+        run: |
+          npm install -g npm
+          npm --version
 
       - name: Install dependencies
         run: npm ci --omit=dev --no-workspaces
@@ -95,7 +99,9 @@ jobs:
           cache-dependency-path: "**/package-lock.json"
 
       - name: Update npm
-        run: npm install -g npm
+        run: |
+          npm install -g npm
+          npm --version
 
       - name: Install dependencies
         run: npm ci
@@ -117,7 +123,9 @@ jobs:
           cache-dependency-path: "**/package-lock.json"
 
       - name: Update npm
-        run: npm install -g npm
+        run: |
+          npm install -g npm
+          npm --version
 
       - name: Install dependencies
         run: npm ci
